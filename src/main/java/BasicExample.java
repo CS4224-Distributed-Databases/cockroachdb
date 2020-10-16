@@ -31,20 +31,22 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 public class BasicExample {
 
+    private static String DIRECTORY = "src/main/java/";
     public static void main(String[] args) {
 
         // Configure the database connection.
         PGSimpleDataSource ds = new PGSimpleDataSource();
         ds.setServerName("localhost");
         ds.setPortNumber(26257);
+
         ds.setDatabaseName("bank");
-        ds.setUser("root"); // Must match this with how you setup your cluster
-        ds.setPassword(null);
-        //        ds.setSsl(true);
-        //        ds.setSslMode("require");
-        //        ds.setSslRootCert("certs/client.root.crt");
-        //        ds.setSslCert("certs/client.maxroach.crt");
-        //        ds.setSslKey("certs/client.maxroach.key.pk8");
+        ds.setUser("root"); // must match this with how you setup your cluster // mu
+        ds.setSsl(true);
+        ds.setSslMode("require");
+        ds.setSslRootCert(DIRECTORY+"certs/client.root.crt");
+        ds.setSslCert(DIRECTORY+"certs/client.maxroach.crt");
+        ds.setSslKey(DIRECTORY+"certs/client.maxroach.key.pk8");
+
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("BasicExample");
 
@@ -55,6 +57,9 @@ public class BasicExample {
         // method is only used to test the retry logic.  It is not
         // necessary in production code.
         dao.testRetryHandling();
+
+        // Set up the 'bank' table
+        dao.createDB();
 
         // Set up the 'accounts' table.
         dao.createAccounts();
@@ -275,6 +280,10 @@ class BasicExampleDAO {
             statement.executeQuery();
         }
     }
+
+    public void createDB() {
+        runSQL("CREATE DATABASE IF NOT EXISTS bank");
+    };
 
     /**
      * Creates a fresh, empty accounts table in the database.
