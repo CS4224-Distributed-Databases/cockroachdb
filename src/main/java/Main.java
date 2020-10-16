@@ -4,6 +4,7 @@
 import java.sql.*;
 
 import DataLoader.CreateTables;
+import DataLoader.LoadData;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
@@ -11,7 +12,7 @@ public class Main {
     private static String DIRECTORY = "src/main/java/";
     private static PGSimpleDataSource ds;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  throws Exception {
 
         // Configure the database connection.
         ds = new PGSimpleDataSource();
@@ -19,7 +20,8 @@ public class Main {
         ds.setPortNumber(26257);
 
         ds.setDatabaseName("cs4224"); // Impt
-        
+        ds.setUser("ooihuiying"); // Must match this with how you setup your cluster
+        ds.setPassword("ooihuiying");
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("CS4224");
 
@@ -32,7 +34,8 @@ public class Main {
         CreateTables c = new CreateTables(ds);
 
         // Load Data
-
+        LoadData l = new LoadData(ds);
+        l.loadAllData();
     }
 
     public static void runSQL(String sqlCode){
