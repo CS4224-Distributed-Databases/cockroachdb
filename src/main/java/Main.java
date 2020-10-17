@@ -1,16 +1,19 @@
-// Keeping this file for future references
-// Taken from their documentation for cockroachdb
-
 import java.sql.*;
+import java.util.*;
 
 import DataLoader.CreateTables;
 import DataLoader.LoadData;
+import Transactions.BaseTransaction;
+import Transactions.NewOrderTransaction;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
 
     private static String DIRECTORY = "src/main/java/";
     private static PGSimpleDataSource ds;
+
+    private static final double convertSecondsDenom = 1000000000.0;
+    private static final double convertMilliSecondsDenom = 1000000.0;
 
     public static void main(String[] args)  throws Exception {
 
@@ -36,45 +39,121 @@ public class Main {
         // Load Data
         LoadData l = new LoadData(ds);
         l.loadAllData();
+
+        // Transactions
+        String consistencyLevel = args[0];
+
+        HashMap<String, PreparedStatement> insertPrepared = new HashMap<>();
+        Scanner sc = new Scanner(System.in);
+        int numOfTransactions = 0;
+        long startTime;
+        long endTime;
+        long transactionStart;
+        long transactionEnd;
+        List<Long> latencies = new ArrayList<>();
+
+        System.out.println("Start executing transactions with consistency level: "+ consistencyLevel);
+
+        startTime = System.nanoTime();
+        while (sc.hasNext()) {
+            String inputLine = sc.nextLine();
+
+            BaseTransaction transaction = null;
+            if (inputLine.startsWith("N")) {
+                 transaction = new NewOrderTransaction(ds);
+            } else if (inputLine.startsWith("P")) {
+                // new PaymentTransaction(db);
+            } else if (inputLine.startsWith("D")) {
+                // new DeliveryTransaction(db);
+            } else if (inputLine.startsWith("O")) {
+                //transaction = new OrderStatusTransaction(db);
+            } else if (inputLine.startsWith("S")) {
+                // transaction = new StockLevelTransaction(db);
+            } else if (inputLine.startsWith("I")) {
+                // PopularItemTransaction(db);
+            } else if (inputLine.startsWith("T")) {
+                // new TopBalanceTransaction(db);
+            } else if (inputLine.startsWith("R")) {
+                // new RelatedCustomersTransaction(db);
+            }
+
+            if (transaction != null) {
+                numOfTransactions++;
+                transaction.parseInput(sc, inputLine);
+                //CHECK IF WE WANT TO INCLUDE parseInput time as well?
+                transactionStart = System.nanoTime();
+                transaction.execute();
+                transactionEnd = System.nanoTime();
+                latencies.add(transactionEnd - transactionStart);
+            }
+        }
+        endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        double timeElapsedInSeconds = timeElapsed / convertSecondsDenom;
+        Collections.sort(latencies);
+        double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
+        double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
+        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
+        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
+
+        printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
+
+        close();
+
     }
 
     public static void runSQL(String sqlCode){
-        try (Connection connection = ds.getConnection()){
+        System.out.println(sqlCode);
+        try (Connection connection = ds.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(sqlCode);
-
-            if (pstmt.execute()) {
-                // We know that `pstmt.getResultSet()` will
-                // not return `null` if `pstmt.execute()` was
-                // true
-                ResultSet rs = pstmt.getResultSet();
-                ResultSetMetaData rsmeta = rs.getMetaData();
-                int colCount = rsmeta.getColumnCount();
-
-                while (rs.next()) {
-                    for (int i=1; i <= colCount; i++) {
-                        String name = rsmeta.getColumnName(i);
-                        String type = rsmeta.getColumnTypeName(i);
-
-                        // In this "bank account" example we know we are only handling
-                        // integer values (technically 64-bit INT8s, the CockroachDB
-                        // default).  This code could be made into a switch statement
-                        // to handle the various SQL types needed by the application.
-                        if (type == "int8") {
-                            int val = rs.getInt(name);
-
-                            // This printed output is for debugging and/or demonstration
-                            // purposes only.  It would not be necessary in production code.
-                            System.out.printf("    %-8s => %10s\n", name, val);
-                        }
-                    }
-                }
-            }
-
+            pstmt.execute();
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
                     e.getSQLState(), e.getCause(), e.getMessage());
         }
+    }
 
+    private static double getAverageLatency(List<Long> latencies) {
+        double sum = 0.0;
+        for (Long latency : latencies) {
+            sum += latency;
+        }
+        return sum / latencies.size();
+    }
+
+    private static double getMedianLatency(List<Long> latencies) {
+        int length = latencies.size();
+        double medianValue;
+        int index = length / 2;
+        if (length % 2 == 0) {
+            medianValue = latencies.get(index) + (latencies.get(index + 1) - latencies.get(index)) / 2.0; //avoid overflow
+        } else {
+            medianValue = latencies.get(index);
+        }
+        return medianValue;
+    }
+
+    private static long getPercentileLatency(List<Long> latencies, int percentile) {
+        int length = latencies.size();
+        int index = length * (percentile / 100);
+        return latencies.get(index);
+    }
+
+    private static void printPerformance(int numOfTransactions, double timeElapsedInSeconds, double averageLatencyInMs, double medianLatencyInMs, double percentileLatency95InMs, double percentileLatency99InMs) {
+        System.err.println("---------------- Performance Output ----------------");
+        System.err.println("Number of executed transactions: " + numOfTransactions);
+        System.err.println(String.format("Total transaction execution time (sec): %.2f", timeElapsedInSeconds));
+        System.err.println(String.format("Transaction throughput: %.2f", numOfTransactions / timeElapsedInSeconds));
+        System.err.println(String.format("Average transaction latency (ms): %.2f", averageLatencyInMs));
+        System.err.println(String.format("Median transaction latency (ms): %.2f", medianLatencyInMs));
+        System.err.println(String.format("95th percentile transaction latency (ms): %.2f", percentileLatency95InMs));
+        System.err.println(String.format("99th percentile transaction latency (ms): %.2f", percentileLatency99InMs));
+        System.err.println("----------------------------------------------------");
+    }
+
+    public static void close() {
+        // close and exit
+        System.exit(0);
     }
 
 }

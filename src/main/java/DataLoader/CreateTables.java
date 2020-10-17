@@ -4,7 +4,7 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 import java.sql.*;
 
-// TODO: Remove unwanted columns
+// TODO: Remove unused columns
 
 public class CreateTables {
 
@@ -76,7 +76,7 @@ public class CreateTables {
 
     public void createStock(){
         runSQL("CREATE TABLE IF NOT EXISTS Stock (S_W_ID INT NOT NULL REFERENCES Warehouse (W_ID), S_I_ID INT NOT NULL REFERENCES Item (I_ID) , S_QUANTITY DECIMAL, " +
-                "S_YTD DECIMAL, S_ORDER INTEGER, S_REMOTE INT, S_DIST_01 STRING, S_DIST_02 STRING, S_DIST_03 STRING, S_DIST_04 STRING, " +
+                "S_YTD DECIMAL, S_ORDER_CNT INTEGER, S_REMOTE_CNT INT, S_DIST_01 STRING, S_DIST_02 STRING, S_DIST_03 STRING, S_DIST_04 STRING, " +
                 "S_DIST_05 STRING, S_DIST_06 STRING, S_DIST_07 STRING, S_DIST_08 STRING, S_DIST_09 STRING, " +
                 "S_DIST_10 STRING, S_DATA STRING, PRIMARY KEY(S_W_ID, S_I_ID))");
     }

@@ -12,14 +12,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-// TODO: Remove unwanted columns
+// TODO: Remove unused columns
 
 public class LoadData {
 
     private static PGSimpleDataSource ds;
     private static final String DIRECTORY = "src/main/java/DataSource/data-files/";
     private static int i = 0;
-    private static final int limit = -1;
+    private static final int limit = 1000;
 
     public LoadData(PGSimpleDataSource datasource){
         ds = datasource;
