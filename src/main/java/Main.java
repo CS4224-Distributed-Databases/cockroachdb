@@ -5,6 +5,7 @@ import DataLoader.CreateTables;
 import DataLoader.LoadData;
 import Transactions.BaseTransaction;
 import Transactions.NewOrderTransaction;
+import Transactions.PaymentTransaction;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
@@ -62,7 +63,7 @@ public class Main {
             if (inputLine.startsWith("N")) {
                  transaction = new NewOrderTransaction(ds);
             } else if (inputLine.startsWith("P")) {
-                // new PaymentTransaction(db);
+                transaction = new PaymentTransaction(ds);
             } else if (inputLine.startsWith("D")) {
                 // new DeliveryTransaction(db);
             } else if (inputLine.startsWith("O")) {
