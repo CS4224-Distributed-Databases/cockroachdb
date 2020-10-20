@@ -90,7 +90,7 @@ public class LoadData {
 
         // create parameterized INSERT statement
         try (Connection connection = ds.getConnection()){
-            PreparedStatement insert = connection.prepareStatement("INSERT INTO District(D_ID, D_W_ID, " +
+            PreparedStatement insert = connection.prepareStatement("INSERT INTO District(D_W_ID, D_ID, " +
                     "D_NAME, D_STREET_1, D_STREET_2, D_CITY, D_STATE," +
                     " D_ZIP, D_TAX, D_YTD, D_NEXT_O_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
@@ -130,8 +130,8 @@ public class LoadData {
 
         // create parameterized INSERT statement
         try (Connection connection = ds.getConnection()){
-            PreparedStatement insert = connection.prepareStatement("INSERT INTO Customer (C_ID, C_W_ID, " +
-                    "C_D_ID, C_FIRST, C_MIDDLE, C_LAST, C_STREET_1, " +
+            PreparedStatement insert = connection.prepareStatement("INSERT INTO Customer (C_W_ID, " +
+                    "C_D_ID, C_ID, C_FIRST, C_MIDDLE, C_LAST, C_STREET_1, " +
                     "C_STREET_2, C_CITY, C_STATE, C_ZIP, C_PHONE, C_SINCE, C_CREDIT, C_CREDIT_LIM, C_DISCOUNT, C_BALANCE, C_YTD_PAYMENT, C_PAYMENT_CNT, " +
                     "C_DELIVERY_CNT, C_DATA) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -185,8 +185,8 @@ public class LoadData {
         // create parameterized INSERT statement
         try (Connection connection = ds.getConnection()){
 
-            PreparedStatement insert = connection.prepareStatement("INSERT INTO Order_New (O_ID, O_W_ID, " +
-                    "O_D_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)" +
+            PreparedStatement insert = connection.prepareStatement("INSERT INTO Order_New (O_W_ID, " +
+                    "O_D_ID, O_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
             String line;
@@ -202,7 +202,7 @@ public class LoadData {
                 insert.setInt(2, Integer.parseInt(row[1]));
                 insert.setInt(3, Integer.parseInt(row[2]));
                 insert.setInt(4, Integer.parseInt(row[3]));
-                insert.setInt(5, Integer.parseInt(row[4]));
+                insert.setInt(5, !row[4].equals("null") ? Integer.parseInt(row[4]) : null);
                 insert.setBigDecimal(6, DatatypeConverter.parseDecimal(row[5]));
                 insert.setBigDecimal(7, DatatypeConverter.parseDecimal(row[6]));
                 insert.setTimestamp(8, Timestamp.valueOf(row[7]));
@@ -322,7 +322,7 @@ public class LoadData {
                 insert.setInt(3, Integer.parseInt(row[2]));
                 insert.setInt(4, Integer.parseInt(row[3]));
                 insert.setInt(5, Integer.parseInt(row[4]));
-                insert.setTimestamp(6, Timestamp.valueOf(row[5]));
+                insert.setTimestamp(6, !row[5].equals("null") ? Timestamp.valueOf(row[5]) : null);
                 insert.setBigDecimal(7, DatatypeConverter.parseDecimal(row[6]));
                 insert.setInt(8, Integer.parseInt(row[7]));
                 insert.setBigDecimal(9, DatatypeConverter.parseDecimal(row[8]));
