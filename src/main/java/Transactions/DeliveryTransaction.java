@@ -87,6 +87,9 @@ public class DeliveryTransaction extends BaseTransaction{
                 q5.setInt(2, customerNumber);
                 q5.execute();
             }
+
+
+            System.out.println("Finish executing Delivery Transaction...");
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
                     e.getSQLState(), e.getCause(), e.getMessage());
