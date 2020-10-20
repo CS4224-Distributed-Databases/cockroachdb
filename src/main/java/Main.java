@@ -40,7 +40,8 @@ public class Main {
         l.loadAllData();
 
         // Transactions
-        String consistencyLevel = args[0];
+        int numOfServers = Integer.parseInt(args[0]);
+        // This will be either be 4 or 5 based on experiment
 
         HashMap<String, PreparedStatement> insertPrepared = new HashMap<>();
         Scanner sc = new Scanner(System.in);
@@ -51,7 +52,7 @@ public class Main {
         long transactionEnd;
         List<Long> latencies = new ArrayList<>();
 
-        System.out.println("Start executing transactions with consistency level: "+ consistencyLevel);
+        System.out.println("Start executing transactions with number of servers: "+ numOfServers);
 
         startTime = System.nanoTime();
         while (sc.hasNext()) {
@@ -71,7 +72,7 @@ public class Main {
             } else if (inputLine.startsWith("I")) {
                 // PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
-                // new TopBalanceTransaction(ds);
+                transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
                 // new RelatedCustomersTransaction(ds);
             }
