@@ -3,11 +3,7 @@ import java.util.*;
 
 import DataLoader.CreateTables;
 import DataLoader.LoadData;
-import Transactions.BaseTransaction;
-import Transactions.DeliveryTransaction;
-import Transactions.NewOrderTransaction;
-import Transactions.PaymentTransaction;
-import Transactions.TopBalanceTransaction;
+import Transactions.*;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
@@ -70,7 +66,7 @@ public class Main {
             } else if (inputLine.startsWith("D")) {
                 transaction = new DeliveryTransaction(ds);
             } else if (inputLine.startsWith("O")) {
-                //transaction = new OrderStatusTransaction(ds);
+                transaction = new OrderStatusTransaction(ds);
             } else if (inputLine.startsWith("S")) {
                 // transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
