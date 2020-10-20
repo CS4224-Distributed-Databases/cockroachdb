@@ -199,7 +199,6 @@ public class NewOrderTransaction extends BaseTransaction{
             q9.setBigDecimal(7, isAllLocal);
             q9.setTimestamp(8, Timestamp.valueOf(entryDateStr));
             q9.execute();
-            ResultSet r9 = q9.getResultSet();
 
             //4. Print output
             System.out.println(String.format(

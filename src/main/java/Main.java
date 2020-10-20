@@ -4,6 +4,7 @@ import java.util.*;
 import DataLoader.CreateTables;
 import DataLoader.LoadData;
 import Transactions.BaseTransaction;
+import Transactions.DeliveryTransaction;
 import Transactions.NewOrderTransaction;
 import Transactions.PaymentTransaction;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -65,17 +66,17 @@ public class Main {
             } else if (inputLine.startsWith("P")) {
                 transaction = new PaymentTransaction(ds);
             } else if (inputLine.startsWith("D")) {
-                // new DeliveryTransaction(db);
+                transaction = new DeliveryTransaction(ds);
             } else if (inputLine.startsWith("O")) {
-                //transaction = new OrderStatusTransaction(db);
+                //transaction = new OrderStatusTransaction(ds);
             } else if (inputLine.startsWith("S")) {
-                // transaction = new StockLevelTransaction(db);
+                // transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
-                // PopularItemTransaction(db);
+                // PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
-                // new TopBalanceTransaction(db);
+                // new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-                // new RelatedCustomersTransaction(db);
+                // new RelatedCustomersTransaction(ds);
             }
 
             if (transaction != null) {
