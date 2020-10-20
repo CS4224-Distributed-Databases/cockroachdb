@@ -7,6 +7,7 @@ import Transactions.BaseTransaction;
 import Transactions.DeliveryTransaction;
 import Transactions.NewOrderTransaction;
 import Transactions.PaymentTransaction;
+import Transactions.TopBalanceTransaction;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
@@ -75,7 +76,7 @@ public class Main {
             } else if (inputLine.startsWith("I")) {
                 // PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
-                // new TopBalanceTransaction(ds);
+                transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
                 // new RelatedCustomersTransaction(ds);
             }
