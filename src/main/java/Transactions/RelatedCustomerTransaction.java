@@ -36,7 +36,7 @@ public class RelatedCustomerTransaction extends BaseTransaction{
 
     @Override
     public void execute() {
-        System.out.println("Starting Execution of Related Customers Transaction...");
+        System.out.println("Start Related Customers...");
         try(Connection connection = ds.getConnection()) {
 
             // (1) Obtain D_NEXT_O_ID
@@ -88,12 +88,12 @@ public class RelatedCustomerTransaction extends BaseTransaction{
             ResultSet r6 = q6.getResultSet();
             ArrayList<String> relatedCustomers = new FormResults().formResults(r6);
 
-            System.out.println("The related customers are....");
+            System.out.println("Related customers are: ");
             for (String cus: relatedCustomers){
                 System.out.println(cus);
             }
 
-            System.out.println("Finish executing Related Customers Transaction...");
+            System.out.println("Finish Related Customers...");
 
             // Delete View
 

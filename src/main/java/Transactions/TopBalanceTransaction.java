@@ -32,7 +32,7 @@ public class TopBalanceTransaction extends BaseTransaction{
     @Override
     public void execute() {
 
-        System.out.println("Starting Execution of Top Balance Transaction...");
+        System.out.println("Start Top Balance...");
         try(Connection connection = ds.getConnection()) {
 
             // (1) Find top 10 customers with highest C_BALANCE in desc order
@@ -65,7 +65,7 @@ public class TopBalanceTransaction extends BaseTransaction{
                 System.out.println(String.format("4. District Name: %s", districtName));
             }
 
-            System.out.println("Finish executing Top Balance Transaction...");
+            System.out.println("Finish Top Balance...");
 
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
