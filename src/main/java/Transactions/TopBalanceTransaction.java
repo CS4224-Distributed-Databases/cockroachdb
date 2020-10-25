@@ -15,11 +15,6 @@ public class TopBalanceTransaction extends BaseTransaction{
 
     private DataSource ds;
 
-    private int customerWarehouseId;
-    private int customerDistrictId;
-    private int customerId;
-    private BigDecimal payment;
-
     public TopBalanceTransaction(PGSimpleDataSource datasource) {
         super(datasource);
         ds = datasource;
