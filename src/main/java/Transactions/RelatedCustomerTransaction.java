@@ -75,6 +75,9 @@ public class RelatedCustomerTransaction extends BaseTransaction{
 //            PreparedStatement q4 = connection.prepareStatement(diffItemsQuery);
 //            PreparedStatement q5 = connection.prepareStatement(twoItemsDiffQuery);
             PreparedStatement q6 = connection.prepareStatement(relatedCus);
+            q6.setInt(1, customerID);
+            q6.setInt(2, warehouseID);
+            q6.setInt(3, districtID);
 
 //            q1.execute();
 //            q2.execute();
