@@ -257,7 +257,7 @@ public class LoadData {
         try (Connection connection = ds.getConnection()){
 
             PreparedStatement insert = connection.prepareStatement("INSERT INTO Stock (S_W_ID, S_I_ID, " +
-                    "S_QUANTITY, S_YTD, S_ORDER, S_REMOTE, S_DIST_01," +
+                    "S_QUANTITY, S_YTD, S_ORDER_CNT, S_REMOTE, S_DIST_01," +
                     " S_DIST_02, S_DIST_03, S_DIST_04, S_DIST_05, S_DIST_06, S_DIST_07, S_DIST_08, S_DIST_09, S_DIST_10, S_DATA) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 

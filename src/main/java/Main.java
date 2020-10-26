@@ -22,12 +22,9 @@ public class Main {
         ds.setPortNumber(26257);
 
         ds.setDatabaseName("cs4224"); // Impt
-        ds.setUser("ooihuiying"); // Must match this with how you setup your cluster
-        ds.setPassword("ooihuiying");
+        ds.setUser("root"); // Note that we created an insecure password that does not require password
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("CS4224");
-
-        // TODO: Explore how to set up more than 1 node using this -> i manually created the cluster.
 
         // Set up the 'CS4224' Database
         runSQL("CREATE DATABASE IF NOT EXISTS cs4224");
@@ -39,64 +36,64 @@ public class Main {
         LoadData l = new LoadData(ds);
         l.loadAllData();
 
-        // Transactions
-        int numOfServers = Integer.parseInt(args[0]);
-        // This will be either be 4 or 5 based on experiment
-
-        HashMap<String, PreparedStatement> insertPrepared = new HashMap<>();
-        Scanner sc = new Scanner(System.in);
-        int numOfTransactions = 0;
-        long startTime;
-        long endTime;
-        long transactionStart;
-        long transactionEnd;
-        List<Long> latencies = new ArrayList<>();
-
-        System.out.println("Start executing transactions with number of servers: "+ numOfServers);
-
-        startTime = System.nanoTime();
-        while (sc.hasNext()) {
-            String inputLine = sc.nextLine();
-
-            BaseTransaction transaction = null;
-            if (inputLine.startsWith("N")) {
-                 transaction = new NewOrderTransaction(ds);
-            } else if (inputLine.startsWith("P")) {
-                transaction = new PaymentTransaction(ds);
-            } else if (inputLine.startsWith("D")) {
-                transaction = new DeliveryTransaction(ds);
-            } else if (inputLine.startsWith("O")) {
-                transaction = new OrderStatusTransaction(ds);
-            } else if (inputLine.startsWith("S")) {
-                // transaction = new StockLevelTransaction(ds);
-            } else if (inputLine.startsWith("I")) {
-                // PopularItemTransaction(ds);
-            } else if (inputLine.startsWith("T")) {
-                transaction = new TopBalanceTransaction(ds);
-            } else if (inputLine.startsWith("R")) {
-                // new RelatedCustomersTransaction(ds);
-            }
-
-            if (transaction != null) {
-                numOfTransactions++;
-                transaction.parseInput(sc, inputLine);
-                //CHECK IF WE WANT TO INCLUDE parseInput time as well?
-                transactionStart = System.nanoTime();
-                transaction.execute();
-                transactionEnd = System.nanoTime();
-                latencies.add(transactionEnd - transactionStart);
-            }
-        }
-        endTime = System.nanoTime();
-        long timeElapsed = endTime - startTime;
-        double timeElapsedInSeconds = timeElapsed / convertSecondsDenom;
-        Collections.sort(latencies);
-        double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
-        double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
-        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
-        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
-
-        printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
+//        // Transactions
+//        int numOfServers = Integer.parseInt(args[0]);
+//        // This will be either be 4 or 5 based on experiment
+//
+//        HashMap<String, PreparedStatement> insertPrepared = new HashMap<>();
+//        Scanner sc = new Scanner(System.in);
+//        int numOfTransactions = 0;
+//        long startTime;
+//        long endTime;
+//        long transactionStart;
+//        long transactionEnd;
+//        List<Long> latencies = new ArrayList<>();
+//
+//        System.out.println("Start executing transactions with number of servers: "+ numOfServers);
+//
+//        startTime = System.nanoTime();
+//        while (sc.hasNext()) {
+//            String inputLine = sc.nextLine();
+//
+//            BaseTransaction transaction = null;
+//            if (inputLine.startsWith("N")) {
+//                 transaction = new NewOrderTransaction(ds);
+//            } else if (inputLine.startsWith("P")) {
+//                transaction = new PaymentTransaction(ds);
+//            } else if (inputLine.startsWith("D")) {
+//                transaction = new DeliveryTransaction(ds);
+//            } else if (inputLine.startsWith("O")) {
+//                transaction = new OrderStatusTransaction(ds);
+//            } else if (inputLine.startsWith("S")) {
+//                transaction = new StockLevelTransaction(ds);
+//            } else if (inputLine.startsWith("I")) {
+//                // PopularItemTransaction(ds);
+//            } else if (inputLine.startsWith("T")) {
+//                transaction = new TopBalanceTransaction(ds);
+//            } else if (inputLine.startsWith("R")) {
+//                transaction = new RelatedCustomerTransaction(ds);
+//            }
+//
+//            if (transaction != null) {
+//                numOfTransactions++;
+//                transaction.parseInput(sc, inputLine);
+//                //CHECK IF WE WANT TO INCLUDE parseInput time as well?
+//                transactionStart = System.nanoTime();
+//                transaction.execute();
+//                transactionEnd = System.nanoTime();
+//                latencies.add(transactionEnd - transactionStart);
+//            }
+//        }
+//        endTime = System.nanoTime();
+//        long timeElapsed = endTime - startTime;
+//        double timeElapsedInSeconds = timeElapsed / convertSecondsDenom;
+//        Collections.sort(latencies);
+//        double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
+//        double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
+//        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
+//        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
+//
+//        printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
 
         close();
 
