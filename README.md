@@ -50,15 +50,11 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - ssh cs4224j@xcnc23.comp.nus.edu.sg
     - ssh cs4224j@xcnc24.comp.nus.edu.sg
 2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below in order. 
-    - run `pkill cockroach` to remove previous node 1 created
+    - From one of the server machine, delete all the folders names node1, node2, ...node 5. IF you have issues deleting it try `pkill cockroach`
     - run `./start-cockroach-node1.sh` for xcnc20 (Node1) <br>
-    - run `pkill cockroach` to remove previous node 2 created 
     - run `./start-cockroach-node2.sh` for xcnc21 (Node2) <br> 
-    - run `pkill cockroach` to remove previous node 3 created 
-    - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>
-    - run `pkill cockroach` to remove previous node 4 created  
-    - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>
-    - run `pkill cockroach` to remove previous node 5 created  
+    - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>   
+    - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>  
     - run `./start-cockroach-node5.sh` for xcnc24 (Node5) <br> 
     - run `./init-cockroach-cluster.sh` for xcnc20 <br> (Always run this after you have set up all the nodes you want)
 >To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
