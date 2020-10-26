@@ -22,6 +22,66 @@ The bulk of our code are in the folder src -> main -> java
 - Transactions: Contains a base transaction file + 8 Transaction queries
 - The file BasicExample.java is just a basic template code
 
+## Running the project
+**Ensure that you have the latest code on the server**
+
+1. Clone the latest github project into your computer
+2. Ensure that you copy the data csv files into `DataSource/data-files` and transaction txt files into `DataSource/xact-files` folder locally. <br>
+The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-files.zip).
+3. Go to the directory of the cloned project
+4. Copy the latest code to the server: If there is an existing old cockroachdb in the server, run `rm -rf cockroachdb` first to remove it. <br>
+ Then run `scp –r cockroachdb cs4224j@xcnc20.comp.nus.edu.sg:~/cockroachdb`
+5. Run `ls -l` and check that file permissions are `rwx------`. If it is not, run `chmod -R 700 cockroachdb`. 
+
+**Compiling the project on the server**
+1. ssh into one server `ssh cs4224j@xcnc20.comp.nus.edu.sg`
+2. Run `cd cockroachdb` to enter the project directory 
+3. Build the project by `mvn clean dependency:copy-dependencies package`
+
+**Create Tables and Loading data on the server**
+1. `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData` <br>
+>Note that step 1 drops all existing tables and create new ones
+
+**Starting Cockroachdb**
+1. ssh into all xcnc20-24 servers on 5 different terminals
+    - ssh cs4224j@xcnc20.comp.nus.edu.sg
+    - ssh cs4224j@xcnc21.comp.nus.edu.sg
+    - ssh cs4224j@xcnc22.comp.nus.edu.sg
+    - ssh cs4224j@xcnc23.comp.nus.edu.sg
+    - ssh cs4224j@xcnc24.comp.nus.edu.sg
+2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below
+    - run `./start-cockroach-node1.sh` for xcnc20 <br> (Node1)
+    - run `./start-cockroach-node2.sh` for xcnc21 <br> (Node2)
+    - run `./start-cockroach-node3.sh` for xcnc22 <br> (Node3)
+    - run `./start-cockroach-node4.sh` for xcnc23 <br> (Node4)
+    - run `./start-cockroach-node5.sh` for xcnc24 <br> (Node5)
+    - run `./init-cockroach-cluster.sh` for xcnc20 <br> (Always run this after you have set up all the nodes you want)
+
+
+**Running an experiment**
+1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
+2. Locally, in the root directory of the project, run `./start-experiment.sh password numOfClients`, 
+replacing `password` with the password to the servers, `numOfClients` with 20 or 40.
+3. Output written to stdout can be found in `log/i.out.log` and output written to stderr can be found in `log/i.err.log` where i is the client number.
+
+**Generating statistics after an experiment**
+
+*Generate the Database state*
+1. run `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. EndStateRunner`
+2. Open `output/end_state.csv` file
+3. Manually copy the results into a row of the main `db-state.csv` which records all db end state for all experiments. 
+Set the first column to be this experiment number. 
+
+*Generate Performance and Throughput Statistics*
+1. run `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. TotalStatsRunner`
+2. For Throughput Statistics: <br>
+2.1 Open `output/throughput_stats.csv` file <br>
+2.2 Manually copy the results into a row of the main `throughput.csv` which records all min, avg and max throughputs for all experiments. 
+Set the first column to be this experiment number. <br>
+3. For Performance Statistics: <br>
+3.1 TODO <br>
+3.2 TODO <br>
+
 ## Set up instructions for local development
 (Start CockroachDB)
 - Follow the instructions to download cockroachdb v19.2.9: https://www.cockroachlabs.com/docs/releases/v19.2.9.html 

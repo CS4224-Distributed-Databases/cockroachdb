@@ -29,20 +29,18 @@ runProject() {
 
 # Build project on each server and start a cockroachdb node on each of the cluster
 buildProject() {
-  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package; cd ../ && cockroach start --insecure --host=192.168.48.169"
+  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package;"
   echo "Built project on xcnc20"
-  sshpass -p $1 ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package; cd ../ && cockroach start --insecure --store=node2 --host=192.168.48.170 --port=26258 --http-port=8081 --join=192.168.48.169:26257"
+  sshpass -p $1 ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package;"
   echo "Built project on xcnc21"
-  sshpass -p $1 ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package; cd ../ && cockroach start --insecure --store=node3 --host=192.168.48.171 --port=26259 --http-port=8082 --join=192.168.48.169:26257"
+  sshpass -p $1 ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package;"
   echo "Built project on xcnc22"
-  sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package; cd ../ && cockroach start --insecure --store=node4 --host=192.168.48.172 --port=26260 --http-port=8083 --join=192.168.48.169:26257"
+  sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package;"
   echo "Built project on xcnc23"
   if ($2 == 5) then
-    sshpass -p $1 ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package; cd ../ && cockroach start --insecure --store=node5 --host=192.168.48.173 --port=26261 --http-port=8084 --join=192.168.48.169:26257"
+    sshpass -p $1 ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; cd cockroachdb && mvn clean dependency:copy-dependencies package;"
     echo "Built project on xcnc24"
   fi
-  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "cockroach init --insecure && grep 'node starting' node1/logs/cockroach.log -A 11; "
-  echo "Initialise cluster on xcnc20"
 }
 
 echo "Starting to build on all servers"

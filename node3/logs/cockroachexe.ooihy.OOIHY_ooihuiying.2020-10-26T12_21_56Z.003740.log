@@ -1,0 +1,35 @@
+I201026 12:21:56.274480 1 util/log/clog.go:1203  [config] file created at: 2020/10/26 12:21:56
+I201026 12:21:56.274480 1 util/log/clog.go:1203  [config] running on machine: ooihy
+I201026 12:21:56.274480 1 util/log/clog.go:1203  [config] binary: CockroachDB CCL v19.2.9 (x86_64-w64-mingw32, built 2020/06/29 22:12:06, go1.12.12)
+I201026 12:21:56.274480 1 util/log/clog.go:1203  [config] arguments: [C:\Users\ooihuiying\cockroach-v19.2.9.windows-6.2-amd64\cockroach.exe start --insecure --store=node3 --host=192.168.48.171 --port=26259 --http-port=8082 --join=192.168.48.169:26257]
+I201026 12:21:56.274480 1 util/log/clog.go:1203  line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
+I201026 12:21:56.274479 1 cli/start.go:1156  logging to directory D:\HuiYing\GitHub Projects\cockroachdb\node3\logs
+W201026 12:21:56.281747 1 cli/start.go:1198  RUNNING IN INSECURE MODE!
+
+- Your cluster is open for any client that can access 192.168.48.171.
+- Any user, even root, can log in without providing a password.
+- Any user, connecting as root, can read or write any data in your cluster.
+- There is no network encryption nor authentication, and thus no confidentiality.
+
+Check out how to secure your cluster: https://www.cockroachlabs.com/docs/v19.2/secure-a-cluster.html
+W201026 12:21:56.407259 1 cli/start.go:1064  Using the default setting for --cache (128 MiB).
+  A significantly larger value is usually needed for good performance.
+  If you have a dedicated server a reasonable setting is --cache=.25 (2.0 GiB).
+W201026 12:21:56.407307 1 cli/start.go:1077  Using the default setting for --max-sql-memory (128 MiB).
+  A significantly larger value is usually needed in production.
+  If you have a dedicated server a reasonable setting is --max-sql-memory=.25 (2.0 GiB).
+I201026 12:21:56.407322 1 cli/start.go:1212  CockroachDB CCL v19.2.9 (x86_64-w64-mingw32, built 2020/06/29 22:12:06, go1.12.12)
+I201026 12:21:56.562466 1 server/config.go:394  system total memory: 7.9 GiB
+I201026 12:21:56.564670 1 server/config.go:396  server configuration:
+max offset             500000000
+cache size             128 MiB
+SQL memory pool size   128 MiB
+scan interval          10m0s
+scan min idle time     10ms
+scan max idle time     1s
+event log enabled      true
+I201026 12:21:56.564729 1 cli/start.go:1049  process identity: uid S-1-5-21-1738912423-1041374935-3406403727-1002, gid S-1-5-21-1738912423-1041374935-3406403727-1002
+I201026 12:21:56.565888 1 cli/start.go:638  starting cockroach node
+I201026 12:21:56.575267 25 storage/engine/rocksdb.go:622  opening rocksdb instance at "D:\\HuiYing\\GitHub Projects\\cockroachdb\\node3\\cockroach-temp644285859"
+I201026 12:21:57.102842 25 server/server.go:892  [n?] monitoring forward clock jumps based on server.clock.forward_jump_check_enabled
+E201026 12:21:57.111965 1 cli/error.go:233  cockroach server exited with error: consider changing the port via --http-addr: listen tcp 192.168.48.171:8082: bind: The requested address is not valid in its context.
