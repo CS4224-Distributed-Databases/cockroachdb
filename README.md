@@ -24,7 +24,8 @@ The bulk of our code are in the folder src -> main -> java
 
 ## Set up instructions for local development
 (Start CockroachDB)
-- Follow the instructions to download cockroachdb and zoneinfo zip into local machine and add ZoneInfo to path: https://www.cockroachlabs.com/docs/v20.1/install-cockroachdb-windows.html
+- Follow the instructions to download cockroachdb v19.2.9: https://www.cockroachlabs.com/docs/releases/v19.2.9.html 
+- and zoneinfo zip into local machine and add ZoneInfo to path: https://www.cockroachlabs.com/docs/v20.1/install-cockroachdb-windows.html 
 - Add cockroach to path: https://www.youtube.com/watch?v=6x9b0t-j1mM
 - Follow instructions here to start local cluster: https://www.cockroachlabs.com/docs/v20.1/secure-a-cluster.html#step-1-generate-certificates.
 
