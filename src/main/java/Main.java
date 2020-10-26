@@ -22,28 +22,20 @@ public class Main {
         ds.setPortNumber(26257);
 
         ds.setDatabaseName("cs4224"); // Impt
-        ds.setUser("ooihuiying"); // Must match this with how you setup your cluster
-        ds.setPassword("ooihuiying");
+        ds.setUser("root"); // Note that we created an insecure password that does not require password
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
         ds.setApplicationName("CS4224");
-
-        // TODO: Explore how to set up more than 1 node using this -> i manually created the cluster.
 
         // Set up the 'CS4224' Database
         runSQL("CREATE DATABASE IF NOT EXISTS cs4224");
 
-        // Create Tables
-        CreateTables c = new CreateTables(ds);
+//        // Create Tables
+//        CreateTables c = new CreateTables(ds);
+//
+//        // Load Data
+//        LoadData l = new LoadData(ds);
+//        l.loadAllData();
 
-        // Load Data
-        LoadData l = new LoadData(ds);
-        l.loadAllData();
-
-        // Transactions
-        int numOfServers = Integer.parseInt(args[0]);
-        // This will be either be 4 or 5 based on experiment
-
-        HashMap<String, PreparedStatement> insertPrepared = new HashMap<>();
         Scanner sc = new Scanner(System.in);
         int numOfTransactions = 0;
         long startTime;
@@ -52,7 +44,7 @@ public class Main {
         long transactionEnd;
         List<Long> latencies = new ArrayList<>();
 
-        System.out.println("Start executing transactions with number of servers: "+ numOfServers);
+        System.out.println("Start executing transactions ..... ");
 
         startTime = System.nanoTime();
         while (sc.hasNext()) {
@@ -68,13 +60,13 @@ public class Main {
             } else if (inputLine.startsWith("O")) {
                 transaction = new OrderStatusTransaction(ds);
             } else if (inputLine.startsWith("S")) {
-                // transaction = new StockLevelTransaction(ds);
+                transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
                 // PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
                 transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-                // new RelatedCustomersTransaction(ds);
+                transaction = new RelatedCustomerTransaction(ds);
             }
 
             if (transaction != null) {
