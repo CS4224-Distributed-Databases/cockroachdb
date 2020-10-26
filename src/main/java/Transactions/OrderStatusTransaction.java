@@ -35,7 +35,7 @@ public class OrderStatusTransaction extends BaseTransaction{
 
     public void execute(){
 
-        System.out.println("Starting Execution of Order Status Transaction...");
+        System.out.println("Start Order Status...");
         try(Connection connection = ds.getConnection()){
 
             // Print out customer's details
@@ -95,7 +95,7 @@ public class OrderStatusTransaction extends BaseTransaction{
                         deliveryDate);
             }
 
-            System.out.println("Finish executing Order Status Transaction...");
+            System.out.println("Finish Order Status...");
 
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",

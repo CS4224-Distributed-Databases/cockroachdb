@@ -36,7 +36,7 @@ public class PaymentTransaction extends BaseTransaction{
 
     @Override
     public void execute() {
-
+        System.out.println("Start Payment...");
         try(Connection connection = ds.getConnection()) {
 
             // (1) Obtain D_NEXT_O_ID
@@ -102,7 +102,7 @@ public class PaymentTransaction extends BaseTransaction{
 
             System.out.println(String.format("4. Payment: %.2f", payment));
 
-            System.out.println("Finish executing Payment Transaction...");
+            System.out.println("Finish Payment...");
 
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
