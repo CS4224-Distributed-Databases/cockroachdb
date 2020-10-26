@@ -49,15 +49,21 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - ssh cs4224j@xcnc22.comp.nus.edu.sg
     - ssh cs4224j@xcnc23.comp.nus.edu.sg
     - ssh cs4224j@xcnc24.comp.nus.edu.sg
-2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below
-    - run `./start-cockroach-node1.sh` for xcnc20 <br> (Node1)
-    - run `./start-cockroach-node2.sh` for xcnc21 <br> (Node2)
-    - run `./start-cockroach-node3.sh` for xcnc22 <br> (Node3)
-    - run `./start-cockroach-node4.sh` for xcnc23 <br> (Node4)
-    - run `./start-cockroach-node5.sh` for xcnc24 <br> (Node5)
+2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below in order. 
+    - run `pkill cockroach` to remove previous node 1 created
+    - run `./start-cockroach-node1.sh` for xcnc20 (Node1) <br>
+    - run `pkill cockroach` to remove previous node 2 created 
+    - run `./start-cockroach-node2.sh` for xcnc21 (Node2) <br> 
+    - run `pkill cockroach` to remove previous node 3 created 
+    - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>
+    - run `pkill cockroach` to remove previous node 4 created  
+    - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>
+    - run `pkill cockroach` to remove previous node 5 created  
+    - run `./start-cockroach-node5.sh` for xcnc24 (Node5) <br> 
     - run `./init-cockroach-cluster.sh` for xcnc20 <br> (Always run this after you have set up all the nodes you want)
-
-
+>To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
+>Check that file scripts permissions are `rwx------`
+>
 **Running an experiment**
 1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
 2. Locally, in the root directory of the project, run `./start-experiment.sh password numOfClients`, 
@@ -101,3 +107,5 @@ Set the first column to be this experiment number. <br>
 - This keyspace is divided into “ranges”, contiguous chunks of the keyspace, so that every key can always be found in a single range.
 - From a SQL perspective, a table and its secondary indexes initially map to a single range, where each key-value pair in the range represents a single row in the table (also called the primary index because the table is sorted by the primary key) or a single row in a secondary index. As soon as that range reaches 512 MiB in size, it splits into two ranges. This process continues for these new ranges as the table and its indexes continue growing.
 - https://www.cockroachlabs.com/docs/stable/architecture/reads-and-writes-overview.html#network-and-i-o-bottlenecks
+
+- More on Cockroachdb commands: https://www.bookstack.cn/read/CockroachDB/952e033fddd3295f.md
