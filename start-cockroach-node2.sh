@@ -1,3 +1,9 @@
 #!/bin/bash
 
-cockroach start --insecure --store=node2 --host=192.168.48.170 --port=26258 --http-port=8081 --join=192.168.48.169:26257
+server=$(hostname -s)
+echo "Starting cockroach on $server"
+
+ip=$(hostname -I)
+echo "IP is $ip"
+
+cockroach start --store=node2 --join=192.168.48.169,192.168.48.170,192.168.48.171,192.168.48.172,192.168.48.173 --advertise-addr=192.168.48.170 --cache=.25 --max-sql-memory=.25 --insecure

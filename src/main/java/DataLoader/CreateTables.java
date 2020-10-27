@@ -42,6 +42,13 @@ public class CreateTables {
         runSQL("DROP TABLE IF EXISTS District");
         runSQL("DROP TABLE IF EXISTS Warehouse");
 
+        runSQL("DROP VIEW IF EXISTS CS4224.OrderItemsView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
+        runSQL("DROP View IF EXISTS CS4224.CustomerOrderItemsPairView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
+        runSQL("DROP VIEW IF EXISTS CS4224.RelatedCus");
+
+
     }
 
     public void createWarehouse(){
