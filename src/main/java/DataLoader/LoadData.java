@@ -303,8 +303,8 @@ public class LoadData {
         // create parameterized INSERT statement
         try (Connection connection = ds.getConnection()){
 
-            PreparedStatement insert = connection.prepareStatement("INSERT INTO OrderLine (OL_NUMBER, OL_W_ID, " +
-                    "OL_D_ID, OL_O_ID, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT," +
+            PreparedStatement insert = connection.prepareStatement("INSERT INTO OrderLine (OL_W_ID, " +
+                    "OL_D_ID, OL_O_ID, OL_NUMBER, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT," +
                     " OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
