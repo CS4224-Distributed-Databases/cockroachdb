@@ -30,9 +30,9 @@ public class InitialiseData {
         // Create Tables
         CreateTables c = new CreateTables(ds);
 
-//        // Load Data
-//        LoadData l = new LoadData(ds);
-//        l.loadAllData();
+        // Load Data
+        LoadData l = new LoadData(ds);
+        l.loadAllData();
 
         close();
 
