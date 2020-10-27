@@ -130,11 +130,11 @@ public class CreateTables {
                 "FROM CS4224.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two");
 
         //used by RelatedCustomer
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-                "FROM CS4224.CustomerOrderItemsFilteredView " +
-                "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-                "HAVING COUNT(*) >= 2");
+//        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+//                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                "FROM CS4224.CustomerOrderItemsFilteredView " +
+//                "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                "HAVING COUNT(*) >= 2");
     }
 
     public static void runSQL(String sqlCode){
