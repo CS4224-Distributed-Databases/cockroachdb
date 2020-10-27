@@ -50,16 +50,19 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - ssh cs4224j@xcnc23.comp.nus.edu.sg
     - ssh cs4224j@xcnc24.comp.nus.edu.sg
 2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below in order. 
-    - From one of the server machine, delete all the folders names node1, node2, ...node 5. IF you have issues deleting it try `pkill cockroach`
+    - From one of the server machine, delete all the folders names cockroach-data, node1, node2, ...node 5. IF you have issues deleting it try `pkill cockroach`
     - run `./start-cockroach-node1.sh` for xcnc20 (Node1) <br>
     - run `./start-cockroach-node2.sh` for xcnc21 (Node2) <br> 
     - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>   
     - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>  
     - run `./start-cockroach-node5.sh` for xcnc24 (Node5) <br> 
-    - run `./init-cockroach-cluster.sh` for xcnc20 <br> (Always run this after you have set up all the nodes you want)
+    - If you have not initialised the cluster before, run `./init-cockroach-cluster.sh` for xcnc20 <br> 
+3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
+
 >To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
 >Check that file scripts permissions are `rwx------`
->
+> If you experience any problems whereby ports have been bined, you can refer to the last section of the readme to find out how to kill the process.
+
 **Running an experiment**
 1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
 2. Locally, in the root directory of the project, run `./start-experiment.sh password numOfClients`, 
@@ -105,3 +108,7 @@ Set the first column to be this experiment number. <br>
 - https://www.cockroachlabs.com/docs/stable/architecture/reads-and-writes-overview.html#network-and-i-o-bottlenecks
 
 - More on Cockroachdb commands: https://www.bookstack.cn/read/CockroachDB/952e033fddd3295f.md
+
+## Notes about using soc cluster server
+- To view the processes, type the command `ps -ef | grep username`. The second column contains the pid.
+- To kill it, type `kill -9 pid`
