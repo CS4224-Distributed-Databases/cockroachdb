@@ -18,7 +18,7 @@ public class Main {
 
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        ds.setServerName("localhost");
+        ds.setServerName("192.168.48.169"); //originally localhost
         ds.setPortNumber(26257);
 
         ds.setDatabaseName("cs4224"); // Impt

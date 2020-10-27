@@ -56,8 +56,8 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>   
     - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>  
     - run `./start-cockroach-node5.sh` for xcnc24 (Node5) <br> 
-    - If you have not initialised the cluster before, run `./init-cockroach-cluster.sh` for xcnc20 <br> 
-3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
+    - If you have not initialised the cluster before, run `cockroach init --insecure` on either of the servers eg, xcnc20 <br> 
+3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
 
 >To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
 >Check that file scripts permissions are `rwx------`

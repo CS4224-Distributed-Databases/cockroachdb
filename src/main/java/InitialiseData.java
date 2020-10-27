@@ -13,9 +13,12 @@ public class InitialiseData {
 
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        ds.setServerName("localhost");
-        ds.setPortNumber(26257);
+        // ds.setServerName("192.168.48.169"); //originally localhost
+        // ds.setPortNumber(26257);
+        System.out.println("INITIALISE DATA++++++++++++++++++++++++++");
+        ds.setUrl("jdbc:postgresql://192.168.48.169:26257/?sslmode=disable");
 
+        System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
         ds.setUser("root"); // Note that we created an insecure password that does not require password
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
@@ -27,9 +30,9 @@ public class InitialiseData {
         // Create Tables
         CreateTables c = new CreateTables(ds);
 
-        // Load Data
-        LoadData l = new LoadData(ds);
-        l.loadAllData();
+//        // Load Data
+//        LoadData l = new LoadData(ds);
+//        l.loadAllData();
 
         close();
 

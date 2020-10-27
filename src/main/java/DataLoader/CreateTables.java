@@ -42,6 +42,13 @@ public class CreateTables {
         runSQL("DROP TABLE IF EXISTS District");
         runSQL("DROP TABLE IF EXISTS Warehouse");
 
+        runSQL("DROP VIEW IF EXISTS CS4224.OrderItemsView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
+        runSQL("DROP View IF EXISTS CS4224.CustomerOrderItemsPairView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
+        runSQL("DROP VIEW IF EXISTS CS4224.RelatedCus");
+
+
     }
 
     public void createWarehouse(){
@@ -96,7 +103,7 @@ public class CreateTables {
         // https://stackoverflow.com/questions/30918633/sql-cte-vs-view
         // Views can be indexed but CTE can't => Hence we choose to use View here
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.OrderItemsView(OI_C_ID, OL_I_ID) " +
+        runSQL("CREATE VIEW CS4224.OrderItemsView(OI_C_ID, OL_I_ID) " +
                 "AS SELECT CS4224.Order_New.O_C_ID, CS4224.OrderLine.OL_I_ID " +
                 "FROM CS4224.Order_New JOIN CS4224.OrderLine ON CS4224.Order_New.O_ID = CS4224.OrderLine.OL_O_ID");
 
