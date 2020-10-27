@@ -105,6 +105,8 @@ Set the first column to be this experiment number. <br>
 - CockroachDB stores all user data (tables, indexes, etc.) and almost all system data in a giant sorted map of key-value pairs. 
 - This keyspace is divided into “ranges”, contiguous chunks of the keyspace, so that every key can always be found in a single range.
 - From a SQL perspective, a table and its secondary indexes initially map to a single range, where each key-value pair in the range represents a single row in the table (also called the primary index because the table is sorted by the primary key) or a single row in a secondary index. As soon as that range reaches 512 MiB in size, it splits into two ranges. This process continues for these new ranges as the table and its indexes continue growing.
+- CockroachDB uses a cost-based optimiser to process a query, consider various plans and pick the one with the lowest cost or the best performance.
+- Default internal implementation of a join is Hash join, but can hint to use other join types (merge, lookup)
 - https://www.cockroachlabs.com/docs/stable/architecture/reads-and-writes-overview.html#network-and-i-o-bottlenecks
 
 - More on Cockroachdb commands: https://www.bookstack.cn/read/CockroachDB/952e033fddd3295f.md

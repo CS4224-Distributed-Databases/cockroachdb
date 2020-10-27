@@ -34,7 +34,7 @@ public class DeliveryTransaction extends BaseTransaction{
 
     @Override
     public void execute() {
-        System.out.println("Starting Execution of Delivery Transaction...");
+        System.out.println("Start Delivery...");
         try(Connection connection = ds.getConnection()) {
 
             PreparedStatement q1 = connection.prepareStatement("SELECT O_ID, O_C_ID from Order_New WHERE O_W_ID = ? AND O_D_ID = ? AND O_CARRIER_ID IS NULL ORDER BY O_ID ASC LIMIT 1");
@@ -89,7 +89,7 @@ public class DeliveryTransaction extends BaseTransaction{
             }
 
 
-            System.out.println("Finish executing Delivery Transaction...");
+            System.out.println("Finish Delivery...");
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
                     e.getSQLState(), e.getCause(), e.getMessage());

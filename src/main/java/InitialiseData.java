@@ -9,7 +9,7 @@ public class InitialiseData {
     private static String DIRECTORY = "src/main/java/";
     private static PGSimpleDataSource ds;
 
-    public static void InitialiseData(String[] args)  throws Exception {
+    public static void main(String[] args)  throws Exception {
 
         // Configure the database connection.
         ds = new PGSimpleDataSource();

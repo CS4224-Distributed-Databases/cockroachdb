@@ -22,10 +22,18 @@ public class CreateTables {
         createItem();
         createOrderLine();
         createStock();
+
+        createViews();
     }
 
     // Need to drop tables with FK dependencies first
     public void dropTables(){
+        runSQL("DROP VIEW IF EXISTS CS4224.RelatedCus");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsPairView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
+        runSQL("DROP VIEW IF EXISTS CS4224.OrderItemsView");
+
         runSQL("DROP TABLE IF EXISTS OrderLine");
         runSQL("DROP TABLE IF EXISTS Stock");
         runSQL("DROP TABLE IF EXISTS Item");
@@ -79,6 +87,39 @@ public class CreateTables {
                 "S_YTD DECIMAL, S_ORDER_CNT INTEGER, S_REMOTE_CNT INT, S_DIST_01 STRING, S_DIST_02 STRING, S_DIST_03 STRING, S_DIST_04 STRING, " +
                 "S_DIST_05 STRING, S_DIST_06 STRING, S_DIST_07 STRING, S_DIST_08 STRING, S_DIST_09 STRING, " +
                 "S_DIST_10 STRING, S_DATA STRING, PRIMARY KEY(S_W_ID, S_I_ID))");
+    }
+
+    public void createViews() {
+
+        //For Related Customer
+
+        // https://stackoverflow.com/questions/30918633/sql-cte-vs-view
+        // Views can be indexed but CTE can't => Hence we choose to use View here
+
+        runSQL("CREATE VIEW IF NOT EXISTS CS4224.OrderItemsView(OI_C_ID, OL_I_ID) " +
+                "AS SELECT CS4224.Order_New.O_C_ID, CS4224.OrderLine.OL_I_ID " +
+                "FROM CS4224.Order_New JOIN CS4224.OrderLine ON CS4224.Order_New.O_ID = CS4224.OrderLine.OL_O_ID");
+
+        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
+                "AS SELECT CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.OrderItemsView.OL_I_ID " +
+                "FROM CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID " +
+                "JOIN CS4224.OrderItemsView ON CS4224.Customer.C_ID = CS4224.OrderItemsView.OI_C_ID");
+
+        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
+                "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
+                "ON first.COI_C_ID <> second.COI_C_ID");
+
+        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+                "AS SELECT * " +
+                "FROM CS4224.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two");
+
+        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+                "AS SELECT * " +
+                "FROM CS4224.CustomerOrderItemsFilteredView " +
+                "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+                "HAVING COUNT(*) >= 2");
+
     }
 
     public static void runSQL(String sqlCode){
