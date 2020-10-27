@@ -202,7 +202,7 @@ public class LoadData {
                 insert.setInt(2, Integer.parseInt(row[1]));
                 insert.setInt(3, Integer.parseInt(row[2]));
                 insert.setInt(4, Integer.parseInt(row[3]));
-                insert.setInt(5, !row[4].equals("null") ? Integer.parseInt(row[4]) : null);
+                insert.setObject(5, !row[4].equals("null") ? Integer.parseInt(row[4]) : null);
                 insert.setBigDecimal(6, DatatypeConverter.parseDecimal(row[5]));
                 insert.setBigDecimal(7, DatatypeConverter.parseDecimal(row[6]));
                 insert.setTimestamp(8, Timestamp.valueOf(row[7]));
@@ -322,7 +322,7 @@ public class LoadData {
                 insert.setInt(3, Integer.parseInt(row[2]));
                 insert.setInt(4, Integer.parseInt(row[3]));
                 insert.setInt(5, Integer.parseInt(row[4]));
-                insert.setTimestamp(6, !row[5].equals("null") ? Timestamp.valueOf(row[5]) : null);
+                insert.setObject(6, !row[5].equals("null") ? Timestamp.valueOf(row[5]) : null);
                 insert.setBigDecimal(7, DatatypeConverter.parseDecimal(row[6]));
                 insert.setInt(8, Integer.parseInt(row[7]));
                 insert.setBigDecimal(9, DatatypeConverter.parseDecimal(row[8]));
