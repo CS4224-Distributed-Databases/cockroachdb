@@ -62,7 +62,7 @@ public class Main {
             } else if (inputLine.startsWith("S")) {
                 transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
-                // PopularItemTransaction(ds);
+                 transaction = new PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
                 transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
@@ -72,7 +72,6 @@ public class Main {
             if (transaction != null) {
                 numOfTransactions++;
                 transaction.parseInput(sc, inputLine);
-                //CHECK IF WE WANT TO INCLUDE parseInput time as well?
                 transactionStart = System.nanoTime();
                 transaction.execute();
                 transactionEnd = System.nanoTime();

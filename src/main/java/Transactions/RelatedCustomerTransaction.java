@@ -65,9 +65,24 @@ public class RelatedCustomerTransaction extends BaseTransaction{
 //                    "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
 //                    "HAVING COUNT(*) >= 2";
 
+            //used by RelatedCustomer
+//            runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+//                    "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                    "FROM CS4224.CustomerOrderItemsFilteredView " +
+//                    "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                    "HAVING COUNT(*) >= 2");
+
+            // remove relatedCus view and combine it with the query
+            // because Groupby inside a view is expensive.
             String relatedCus = "SELECT C_ID_Two, W_ID_Two, D_ID_Two " +
-                    "FROM CS4225.RelatedCus " +
-                    "WHERE CS4225.RelatedCus.C_ID_One = ? AND W_ID_One = ? AND D_ID_One = ?";
+                    "FROM CS4224.CustomerOrderItemsFilteredView " +
+                    "WHERE C_ID_One = ? AND W_ID_One = ? AND D_ID_One = ? " +
+                    "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+                    "HAVING COUNT(*) >= 2";
+
+//            String relatedCus = "SELECT C_ID_Two, W_ID_Two, D_ID_Two " +
+//                    "FROM CS4224.RelatedCus " +
+//                    "WHERE CS4224.RelatedCus.C_ID_One = ? AND W_ID_One = ? AND D_ID_One = ?";
 
 //            PreparedStatement q1 = connection.prepareStatement(orderItemsView);
 //            PreparedStatement q2 = connection.prepareStatement(cusOrderItemsView);

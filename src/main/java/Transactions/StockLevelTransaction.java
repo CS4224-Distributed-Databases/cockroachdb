@@ -34,7 +34,7 @@ public class StockLevelTransaction extends BaseTransaction {
 
     public void execute() {
 
-        System.out.println("Starting Execution of Stock Level Transaction...");
+        System.out.println("Starting Stock Level...");
 
         try (Connection connection = ds.getConnection()) {
             // Query 1: Get next available order number from specified district
@@ -83,7 +83,7 @@ public class StockLevelTransaction extends BaseTransaction {
             }
 
             System.out.printf("Num of items below threshold: %d\n", itemsBelowThresholdCount);
-            System.out.println("Finish executing Stock Level Transaction...");
+            System.out.println("Finish Stock Level...");
 
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",

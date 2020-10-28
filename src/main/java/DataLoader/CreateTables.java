@@ -32,7 +32,7 @@ public class CreateTables {
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsPairView");
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
-        runSQL("DROP VIEW IF EXISTS CS4224.OrderItemsView");
+        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderView");
 
         runSQL("DROP TABLE IF EXISTS OrderLine");
         runSQL("DROP TABLE IF EXISTS Stock");
@@ -84,7 +84,7 @@ public class CreateTables {
     }
 
     public void createOrderLine(){
-        runSQL("CREATE TABLE IF NOT EXISTS OrderLine (OL_NUMBER INT UNIQUE NOT NULL, OL_W_ID INT NOT NULL, OL_D_ID INT NOT NULL, " +
+        runSQL("CREATE TABLE IF NOT EXISTS OrderLine (OL_NUMBER INT NOT NULL, OL_W_ID INT NOT NULL, OL_D_ID INT NOT NULL, " +
                 "OL_O_ID INT NOT NULL, OL_I_ID INT, OL_DELIVERY_D TIMESTAMP, OL_AMOUNT DECIMAL, OL_SUPPLY_W_ID INT, OL_QUANTITY DECIMAL, " +
                 "OL_DIST_INFO STRING, PRIMARY KEY(OL_NUMBER, OL_W_ID, OL_D_ID, OL_O_ID), FOREIGN KEY(OL_O_ID, OL_W_ID, OL_D_ID) REFERENCES Order_New(O_ID, O_W_ID, O_D_ID))");
     }
@@ -98,35 +98,50 @@ public class CreateTables {
 
     public void createViews() {
 
-        //For Related Customer
+        //For Related Customer and Popular Item Transactions (first two)
 
         // https://stackoverflow.com/questions/30918633/sql-cte-vs-view
         // Views can be indexed but CTE can't => Hence we choose to use View here
+        // Note that cannot use * which is not yet implemented in views
 
-        runSQL("CREATE VIEW CS4224.OrderItemsView(OI_C_ID, OL_I_ID) " +
-                "AS SELECT CS4224.Order_New.O_C_ID, CS4224.OrderLine.OL_I_ID " +
-                "FROM CS4224.Order_New JOIN CS4224.OrderLine ON CS4224.Order_New.O_ID = CS4224.OrderLine.OL_O_ID");
+        //used by both
+        runSQL("CREATE VIEW CS4224.CustomerOrderView(CO_O_ID, CO_O_ENTRY_D, CO_C_ID, CO_W_ID, CO_D_ID, CO_C_FIRST, CO_C_MIDDLE, CO_C_LAST) " +
+                "AS SELECT CS4224.Order_New.O_ID, CS4224.Order_New.O_ENTRY_D, CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.Customer.C_FIRST, CS4224.Customer.C_MIDDLE, CS4224.Customer.C_LAST FROM " +
+                "CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
-                "AS SELECT CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.OrderItemsView.OL_I_ID " +
-                "FROM CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID " +
-                "JOIN CS4224.OrderItemsView ON CS4224.Customer.C_ID = CS4224.OrderItemsView.OI_C_ID");
+        //used by both
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID, COI_O_ID) " +
+                "AS SELECT CS4224.CustomerOrderView.CO_C_ID, CS4224.CustomerOrderView.CO_W_ID, CS4224.CustomerOrderView.CO_D_ID, CS4224.OrderLine.OL_I_ID, CS4224.OrderLine.OL_O_ID " +
+                "FROM CS4224.CustomerOrderView JOIN CS4224.OrderLine ON CS4224.CustomerOrderView.CO_O_ID = CS4224.OrderLine.OL_O_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
+//        runSQL("CREATE VIEW IF NOT EXISTS CS4224.OrderItemsView(OI_C_ID, OL_I_ID) " +
+//                "AS SELECT CS4224.Order_New.O_C_ID, CS4224.OrderLine.OL_I_ID " +
+//                "FROM CS4224.Order_New JOIN CS4224.OrderLine ON CS4224.Order_New.O_ID = CS4224.OrderLine.OL_O_ID");
+//
+//        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
+//                "AS SELECT CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.OrderItemsView.OL_I_ID " +
+//                "FROM CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID " +
+//                "JOIN CS4224.OrderItemsView ON CS4224.Customer.C_ID = CS4224.OrderItemsView.OI_C_ID");
+
+        //used by RelatedCustomer
+        //  did not include first.COI_I_ID and second.COI_I_ID
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID " +
                 "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
-                "ON first.COI_C_ID <> second.COI_C_ID");
+                "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT * " +
-                "FROM CS4224.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT * " +
-                "FROM CS4224.CustomerOrderItemsFilteredView " +
-                "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-                "HAVING COUNT(*) >= 2");
+        //used by RelatedCustomer
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+                "FROM CS4224.CustomerOrderItemsPairView where W_ID_ONE <> W_ID_Two");
 
+        //used by RelatedCustomer
+//        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+//                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                "FROM CS4224.CustomerOrderItemsFilteredView " +
+//                "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                "HAVING COUNT(*) >= 2");
     }
 
     public static void runSQL(String sqlCode){
