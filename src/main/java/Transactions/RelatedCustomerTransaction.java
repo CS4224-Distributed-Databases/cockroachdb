@@ -39,39 +39,6 @@ public class RelatedCustomerTransaction extends BaseTransaction{
         System.out.println("Start Related Customers...");
         try(Connection connection = ds.getConnection()) {
 
-            // (1) Obtain D_NEXT_O_ID
-
-//            String orderItemsView = "CREATE VIEW CS4225.OrderItemsView(OI_C_ID, OL_I_ID) " +
-//                    "AS SELECT CS4225.Order_New.O_C_ID, CS4225.OrderLine.OL_I_ID " +
-//                    "FROM CS4225.Order_New JOIN CS4225.OrderLine ON CS4225.Order_New.O_ID = CS4225.OrderLine.OL_O_ID";
-//
-//            String cusOrderItemsView = "CREATE VIEW CS4225.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
-//                    "AS SELECT CS4225.Customer.C_ID, CS4225.Customer.C_W_ID, CS4225.Customer.C_D_ID, CS4225.OrderItemsView.OL_I_ID " +
-//                    "FROM CS4225.Customer JOIN CS4225.Order_New ON CS4225.Customer.C_ID = CS4225.Order_New.O_C_ID " +
-//                    "JOIN CS4225.OrderItemsView ON CS4225.Customer.C_ID = CS4225.OrderItemsView.OI_C_ID";
-//
-//            String cusPairView = "CREATE VIEW CS4225.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-//                    "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
-//                    "FROM CS4225.CustomerOrderItemsView AS first JOIN CS4225.CustomerOrderItemsView AS second " +
-//                    "ON first.COI_C_ID <> second.COI_C_ID";
-//
-//            String diffItemsQuery = "CREATE VIEW CS4225.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-//                    "AS SELECT * " +
-//                    "FROM CS4225.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two";
-//
-//            String twoItemsDiffQuery = "CREATE VIEW CS4225.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-//                    "AS SELECT * " +
-//                    "FROM CS4225.CustomerOrderItemsFilteredView " +
-//                    "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-//                    "HAVING COUNT(*) >= 2";
-
-            //used by RelatedCustomer
-//            runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-//                    "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-//                    "FROM CS4224.CustomerOrderItemsFilteredView " +
-//                    "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-//                    "HAVING COUNT(*) >= 2");
-
             // remove relatedCus view and combine it with the query
             // because Groupby inside a view is expensive.
             String relatedCus = "SELECT C_ID_Two, W_ID_Two, D_ID_Two " +
@@ -80,29 +47,15 @@ public class RelatedCustomerTransaction extends BaseTransaction{
                     "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
                     "HAVING COUNT(*) >= 2";
 
-//            String relatedCus = "SELECT C_ID_Two, W_ID_Two, D_ID_Two " +
-//                    "FROM CS4224.RelatedCus " +
-//                    "WHERE CS4224.RelatedCus.C_ID_One = ? AND W_ID_One = ? AND D_ID_One = ?";
+            PreparedStatement q1 = connection.prepareStatement(relatedCus);
+            q1.setInt(1, customerID);
+            q1.setInt(2, warehouseID);
+            q1.setInt(3, districtID);
 
-//            PreparedStatement q1 = connection.prepareStatement(orderItemsView);
-//            PreparedStatement q2 = connection.prepareStatement(cusOrderItemsView);
-//            PreparedStatement q3 = connection.prepareStatement(cusPairView);
-//            PreparedStatement q4 = connection.prepareStatement(diffItemsQuery);
-//            PreparedStatement q5 = connection.prepareStatement(twoItemsDiffQuery);
-            PreparedStatement q6 = connection.prepareStatement(relatedCus);
-            q6.setInt(1, customerID);
-            q6.setInt(2, warehouseID);
-            q6.setInt(3, districtID);
+            q1.execute();
 
-//            q1.execute();
-//            q2.execute();
-//            q3.execute();
-//            q4.execute();
-//            q5.execute();
-            q6.execute();
-
-            ResultSet r6 = q6.getResultSet();
-            ArrayList<String> relatedCustomers = new FormResults().formResults(r6);
+            ResultSet r1 = q1.getResultSet();
+            ArrayList<String> relatedCustomers = new FormResults().formResults(r1);
 
             System.out.println("Related customers are: ");
             for (String cus: relatedCustomers){
@@ -111,19 +64,6 @@ public class RelatedCustomerTransaction extends BaseTransaction{
 
             System.out.println("Finish Related Customers...");
 
-            // Delete View
-
-//            PreparedStatement q7 = connection.prepareStatement("DROP VIEW IF EXISTS CS4225.OrderItemsView");
-//            PreparedStatement q8 = connection.prepareStatement("DROP VIEW IF EXISTS CS4225.CustomerOrderItemsView");
-//            PreparedStatement q9 = connection.prepareStatement("DROP VIEW IF EXISTS CS4225.CustomerOrderItemsPairView");
-//            PreparedStatement q10 = connection.prepareStatement("DROP VIEW IF EXISTS CustomerOrderItemsFilteredView");
-//            PreparedStatement q11 = connection.prepareStatement("DROP VIEW IF EXISTS CS4225.RelatedCus");
-//
-//            q7.execute();
-//            q8.execute();
-//            q9.execute();
-//            q10.execute();
-//            q11.execute();
 
         } catch (SQLException e) {
             System.out.printf("Execute.runSQL ERROR: { state => %s, cause => %s, message => %s }\n",
