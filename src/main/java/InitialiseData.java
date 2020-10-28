@@ -27,8 +27,8 @@ public class InitialiseData {
         // Set up the 'CS4224' Database
         runSQL("CREATE DATABASE IF NOT EXISTS cs4224");
 
-//        // Create Tables
-//        CreateTables c = new CreateTables(ds);
+        // Create Tables
+        CreateTables c = new CreateTables(ds);
 
         // Load Data
         LoadData l = new LoadData(ds);
