@@ -123,18 +123,19 @@ public class CreateTables {
 //                "FROM CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID " +
 //                "JOIN CS4224.OrderItemsView ON CS4224.Customer.C_ID = CS4224.OrderItemsView.OI_C_ID");
 
-        //used by RelatedCustomer
-        //  did not include first.COI_I_ID and second.COI_I_ID
+        // Used by RelatedCustomer
+        // Here, we pair customers who have different customer IDs, different warehouse Ids and buys the same items
         runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID " +
+                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
                 "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
-                "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID");
+                "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID AND first.COI_W_ID <> second.COI_W_ID");
 
 
-        //used by RelatedCustomer
-        runSQL("CREATE VIEW CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
-                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-                "FROM CS4224.CustomerOrderItemsPairView where W_ID_ONE <> W_ID_Two");
+//        // Used by RelatedCustomer
+//        // Here, we remove customers with the same warehouse id
+//        runSQL("CREATE VIEW CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+//                "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
+//                "FROM CS4224.CustomerOrderItemsPairView where W_ID_ONE <> W_ID_Two");
 
         //used by RelatedCustomer
 //        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
