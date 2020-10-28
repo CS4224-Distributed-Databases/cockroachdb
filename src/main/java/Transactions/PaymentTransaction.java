@@ -74,7 +74,7 @@ public class PaymentTransaction extends BaseTransaction{
                 "1. Customer: (%d, %d, %d), Name: (%s, %s, %s), Address: (%s, %s, %s, %s, %s), C_PHONE: %s, C_SINCE: %s, C_CREDIT: %s, C_CREDIT_LIM: %.2f, C_DISCOUNT: %.4f, C_BALANCE: %.2f",
                 customerWarehouseId, customerDistrictId, customerId,
                     itemInfo[3], itemInfo[4], itemInfo[5], itemInfo[6], itemInfo[7], itemInfo[8], itemInfo[9], itemInfo[10], itemInfo[11], itemInfo[12],
-                    itemInfo[13], itemInfo[14], itemInfo[15], itemInfo[16]
+                    itemInfo[13], DatatypeConverter.parseDecimal(itemInfo[14]), DatatypeConverter.parseDecimal(itemInfo[15]), DatatypeConverter.parseDecimal(itemInfo[16])
                     ));
 
             PreparedStatement q5 = connection.prepareStatement("SELECT * FROM Warehouse WHERE W_ID = ?");
