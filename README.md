@@ -61,7 +61,7 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
 
 >To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
 >Check that file scripts permissions are `rwx------`
-> If you experience any problems whereby ports have been bined, you can refer to the last section of the readme to find out how to kill the process.
+> If you experience any problems whereby ports have been binded, you can refer to the last section of the readme to find out how to kill the process.
 
 **Running an experiment**
 1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
@@ -86,6 +86,10 @@ Set the first column to be this experiment number. <br>
 3. For Performance Statistics: <br>
 3.1 TODO <br>
 3.2 TODO <br>
+
+*Shut down node*
+- Open a new terminal from the node you want to shut down and type: `cockroach quit --insecure`
+
 
 ## Set up instructions for local development
 (Start CockroachDB)

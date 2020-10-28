@@ -23,7 +23,7 @@ public class CreateTables {
         createOrderLine();
         createStock();
 
-        createViews();
+        // createViews();
     }
 
     // Need to drop tables with FK dependencies first
@@ -107,21 +107,21 @@ public class CreateTables {
                 "AS SELECT CS4224.Order_New.O_C_ID, CS4224.OrderLine.OL_I_ID " +
                 "FROM CS4224.Order_New JOIN CS4224.OrderLine ON CS4224.Order_New.O_ID = CS4224.OrderLine.OL_O_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID) " +
                 "AS SELECT CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.OrderItemsView.OL_I_ID " +
                 "FROM CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID " +
                 "JOIN CS4224.OrderItemsView ON CS4224.Customer.C_ID = CS4224.OrderItemsView.OI_C_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
                 "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
                 "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
                 "ON first.COI_C_ID <> second.COI_C_ID");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
                 "AS SELECT * " +
                 "FROM CS4224.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two");
 
-        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+        runSQL("CREATE VIEW CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
                 "AS SELECT * " +
                 "FROM CS4224.CustomerOrderItemsFilteredView " +
                 "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +

@@ -19,7 +19,7 @@ public class LoadData {
     private static PGSimpleDataSource ds;
     private static final String DIRECTORY = "src/main/java/DataSource/data-files/";
     private static int i = 0;
-    private static final int limit = 1000;
+    private static final int limit = -1;
 
     public LoadData(PGSimpleDataSource datasource){
         ds = datasource;
