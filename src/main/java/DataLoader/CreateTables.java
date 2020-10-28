@@ -128,13 +128,13 @@ public class CreateTables {
         runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
                 "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID " +
                 "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
-                "ON first.COI_C_ID <> second.COI_C_ID");
+                "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID");
 
 
         //used by RelatedCustomer
         runSQL("CREATE VIEW CS4224.CustomerOrderItemsFilteredView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
                 "AS SELECT C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
-                "FROM CS4224.CustomerOrderItemsPairView where D_ID_ONE = D_ID_Two");
+                "FROM CS4224.CustomerOrderItemsPairView where W_ID_ONE <> W_ID_Two");
 
         //used by RelatedCustomer
 //        runSQL("CREATE VIEW IF NOT EXISTS CS4224.RelatedCus (C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
