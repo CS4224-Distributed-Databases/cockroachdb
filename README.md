@@ -50,7 +50,7 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - ssh cs4224j@xcnc23.comp.nus.edu.sg
     - ssh cs4224j@xcnc24.comp.nus.edu.sg
 2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below in order. 
-    - From one of the server machine, delete all the folders names cockroach-data, node1, node2, ...node 5. IF you have issues deleting it try `pkill cockroach`
+    - From one of the server machine, delete all the folders names cockroach-data, node1, node2, ...node 5. `rm -rf node1` IF you have issues deleting it try `pkill cockroach`
     - run `./start-cockroach-node1.sh` for xcnc20 (Node1) <br>
     - run `./start-cockroach-node2.sh` for xcnc21 (Node2) <br> 
     - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>   

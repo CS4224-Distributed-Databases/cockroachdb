@@ -28,8 +28,6 @@ public class CreateTables {
 
     // Need to drop tables with FK dependencies first
     public void dropTables(){
-        runSQL("DROP VIEW IF EXISTS CS4224.RelatedCus");
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsPairView");
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
         runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderView");
@@ -41,13 +39,6 @@ public class CreateTables {
         runSQL("DROP TABLE IF EXISTS Customer");
         runSQL("DROP TABLE IF EXISTS District");
         runSQL("DROP TABLE IF EXISTS Warehouse");
-
-        runSQL("DROP VIEW IF EXISTS CS4224.OrderItemsView");
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
-        runSQL("DROP View IF EXISTS CS4224.CustomerOrderItemsPairView");
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsFilteredView");
-        runSQL("DROP VIEW IF EXISTS CS4224.RelatedCus");
-
 
     }
 
@@ -116,7 +107,7 @@ public class CreateTables {
 
         // Used by RelatedCustomer
         // Here, we pair customers who have different customer IDs, different warehouse Ids and buys the same items
-        runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two) " +
+        runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, COI_I_ID_One, C_ID_Two, W_ID_Two, D_ID_Two, COI_I_ID_Two) " +
                 "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
                 "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
                 "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID AND first.COI_W_ID <> second.COI_W_ID");
