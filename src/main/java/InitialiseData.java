@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import DataLoader.CreateTables;
 import DataLoader.LoadData;
@@ -15,7 +17,6 @@ public class InitialiseData {
         ds = new PGSimpleDataSource();
         // ds.setServerName("192.168.48.169"); //originally localhost
         // ds.setPortNumber(26257);
-        System.out.println("INITIALISE DATA++++++++++++++++++++++++++");
         ds.setUrl("jdbc:postgresql://192.168.48.169:26257/?sslmode=disable");
 
         System.out.println(ds.getDescription());

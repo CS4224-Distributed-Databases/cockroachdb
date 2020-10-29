@@ -141,4 +141,6 @@ Set the first column to be this experiment number. <br>
 - `vim fileName`
 - `:set ff=unix` 
 
+##### To view output of script for eg, output.txt
+- `./script-to-run > output.txt`
  

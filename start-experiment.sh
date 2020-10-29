@@ -1,27 +1,29 @@
 #!/bin/bash
 
+# Output of Experiment logs will be written directly to the project Directory experiment-logs
 runExperiments() {
-  # Remove old log files on each server.
-  for ((i=0; i<5; i++)); do
-    server="xcnc$((20 + $i % 5))"
-    sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && rm -rf experiment-logs && mkdir experiment-logs"
-    echo "Remove old experiment-logs"
-  done
+  # Remove experiment-logs directory and create new one
+  echo "Create new experiment-logs directory in project structure"
+  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; rm -rf temp/cockroachdb/src/main/java/experiment-logs; mkdir temp/cockroachdb/src/main/java/experiment-logs"
 
   # $2 is number of clients
   #iterate through each client and assign to the correct server to run
-  for ((i=1; i<=$2; i++)); do
+  for ((i=0; i<$2; i++)); do
   	server="xcnc$((20 + $i % 5))"
   	echo "Assign client $i on $server"
-  	
-  	input_file="src/main/java/DataSource/xact-files/${i}.txt"
-  	stdout_file="experiment-logs/${i}.out.log"
-  	stderr_file="experiment-logs/${i}.err.log"
+
+  	input_file="src/main/java/DataSource/xact-files/${i+1}.txt"
+  	stdout_file="src/main/java/experiment-logs/${i+1}.out.log"
+  	stderr_file="src/main/java/experiment-logs/${i+1}.err.log"
+
+  	# Make txt, out, err files so that the next ssh line won't have error when we feed into Main Function
+  	echo "Create empty transaction files"
+  	sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; touch temp/cockroachdb/src/main/java/experiment-logs/${i+1}.txt; touch temp/cockroachdb/src/main/java/experiment-logs/${i+1}.out.log; touch temp/cockroachdb/src/main/java/experiment-logs/${i+1}.err.log"
 
   	echo "Start running transactions via Main function"
-  	sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. Main ${input_file} > ${stdout_file} 2> ${stderr_file} &" > /dev/null 2>&1 &
-  	
-  	echo "Finish running $i transaction file on $server"
+    sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. Main ${input_file} > ${stdout_file} ${stderr_file} ${i};"
+
+  	echo "Finish running ${i+1} transaction file on $server"
   done
 }
 
@@ -32,15 +34,15 @@ createExternFolderToStoreCSV() {
   echo "Create /extern directories for each node"
   echo $1
   # sshpass -p "$1" ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; mkdir temp/node1/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node1/extern/;"
-  ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; mkdir temp/node1/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node1/extern/;"
+  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; mkdir temp/node1/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node1/extern/;"
   echo "node 1"
-  ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; mkdir temp/node2/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node2/extern/;"
+  sshpass -p $1 ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; mkdir temp/node2/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node2/extern/;"
   echo "node 2"
-  ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; mkdir temp/node3/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node3/extern/;"
+  sshpass -p $1 ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; mkdir temp/node3/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node3/extern/;"
   echo "node 3"
-  ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; mkdir temp/node4/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node4/extern/;"
+  sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; mkdir temp/node4/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node4/extern/;"
   echo "node 4"
-  ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; mkdir temp/node5/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node5/extern/;"
+  sshpass -p $1 ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; mkdir temp/node5/extern/; cp -r temp/cockroachdb/src/main/java/DataSource/* ~/temp/node5/extern/;"
   echo "node 5"
   echo "Created /extern directory for all nodes and transfer CSV files inside each directory"
 }
@@ -54,14 +56,13 @@ loadDataToDatabaseFromExternFolder() {
 # ============================START=============================
 ## $1: Password, $2 Number of clients: 20/40, $3 number of servers: 4/5
 echo "Starting to load data-files into all nodes' /extern directory"
-# Currently $1 is not in used because sshpass is not working
 # createExternFolderToStoreCSV $1
 
-echo "Load data-files into cockroachdb database.....call InitialiseData File Code in the Project"
+echo "Load data-files into cockroachdb database.....call InitialiseData File in the Project"
 # loadDataToDatabaseFromExternFolder
 
 echo "Start Experiment. Please key in parameters with the first being the number of clients followed by number of servers"
 echo "starting to run with $2 number of clients"
 echo "Starting to run with $3 number of servers"
-runExperiments $2 $3
+runExperiments $1 $2 $3
 echo "Complete experiment"
