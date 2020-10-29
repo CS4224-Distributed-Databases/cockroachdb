@@ -56,10 +56,10 @@ loadDataToDatabaseFromExternFolder() {
 # ============================START=============================
 ## $1: Password, $2 Number of clients: 20/40, $3 number of servers: 4/5
 echo "Starting to load data-files into all nodes' /extern directory"
-# createExternFolderToStoreCSV $1
+createExternFolderToStoreCSV $1
 
 echo "Load data-files into cockroachdb database.....call InitialiseData File in the Project"
-# loadDataToDatabaseFromExternFolder
+loadDataToDatabaseFromExternFolder
 
 echo "Start Experiment. Please key in parameters with the first being the number of clients followed by number of servers"
 echo "starting to run with $2 number of clients"

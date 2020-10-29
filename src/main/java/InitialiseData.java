@@ -1,6 +1,4 @@
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import DataLoader.CreateTables;
 import DataLoader.LoadData;

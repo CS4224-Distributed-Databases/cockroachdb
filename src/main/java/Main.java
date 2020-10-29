@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.*;
 
+import Transactions.*;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
@@ -53,48 +54,48 @@ public class Main {
 
         System.out.println("Start executing transactions ..... ");
 
-//        startTime = System.nanoTime();
-//        while (sc.hasNext()) {
-//            String inputLine = sc.nextLine();
-//
-//            BaseTransaction transaction = null;
-//            if (inputLine.startsWith("N")) {
-//                 transaction = new NewOrderTransaction(ds);
-//            } else if (inputLine.startsWith("P")) {
-//                transaction = new PaymentTransaction(ds);
-//            } else if (inputLine.startsWith("D")) {
-//                transaction = new DeliveryTransaction(ds);
-//            } else if (inputLine.startsWith("O")) {
-//                transaction = new OrderStatusTransaction(ds);
-//            } else if (inputLine.startsWith("S")) {
-//                transaction = new StockLevelTransaction(ds);
-//            } else if (inputLine.startsWith("I")) {
-//                 transaction = new PopularItemTransaction(ds);
-//            } else if (inputLine.startsWith("T")) {
-//                transaction = new TopBalanceTransaction(ds);
-//            } else if (inputLine.startsWith("R")) {
-//                transaction = new RelatedCustomerTransaction(ds);
-//            }
-//
-//            if (transaction != null) {
-//                numOfTransactions++;
-//                transaction.parseInput(sc, inputLine);
-//                transactionStart = System.nanoTime();
-//                transaction.execute();
-//                transactionEnd = System.nanoTime();
-//                latencies.add(transactionEnd - transactionStart);
-//            }
-//        }
-//        endTime = System.nanoTime();
-//        long timeElapsed = endTime - startTime;
-//        double timeElapsedInSeconds = timeElapsed / convertSecondsDenom;
-//        Collections.sort(latencies);
-//        double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
-//        double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
-//        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
-//        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
-//
-//        printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
+        startTime = System.nanoTime();
+        while (sc.hasNext()) {
+            String inputLine = sc.nextLine();
+
+            BaseTransaction transaction = null;
+            if (inputLine.startsWith("N")) {
+                 transaction = new NewOrderTransaction(ds);
+            } else if (inputLine.startsWith("P")) {
+                transaction = new PaymentTransaction(ds);
+            } else if (inputLine.startsWith("D")) {
+                transaction = new DeliveryTransaction(ds);
+            } else if (inputLine.startsWith("O")) {
+                transaction = new OrderStatusTransaction(ds);
+            } else if (inputLine.startsWith("S")) {
+                transaction = new StockLevelTransaction(ds);
+            } else if (inputLine.startsWith("I")) {
+                 transaction = new PopularItemTransaction(ds);
+            } else if (inputLine.startsWith("T")) {
+                transaction = new TopBalanceTransaction(ds);
+            } else if (inputLine.startsWith("R")) {
+                transaction = new RelatedCustomerTransaction(ds);
+            }
+
+            if (transaction != null) {
+                numOfTransactions++;
+                transaction.parseInput(sc, inputLine);
+                transactionStart = System.nanoTime();
+                transaction.execute();
+                transactionEnd = System.nanoTime();
+                latencies.add(transactionEnd - transactionStart);
+            }
+        }
+        endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        double timeElapsedInSeconds = timeElapsed / convertSecondsDenom;
+        Collections.sort(latencies);
+        double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
+        double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
+        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
+        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
+
+        printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
 
         close();
 
