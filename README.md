@@ -1,3 +1,4 @@
+
 ## CS4224 Distributed Databases
 ### CockroachDB
 
@@ -23,26 +24,24 @@ The bulk of our code are in the folder src -> main -> java
 - The file BasicExample.java is just a basic template code
 
 ## Running the project
-**Ensure that you have the latest code on the server**
 
+**Ensure that you have the latest code on the server** 
 1. Clone the latest github project into your computer
 2. Ensure that you copy the data csv files into `DataSource/data-files` and transaction txt files into `DataSource/xact-files` folder locally. <br>
 The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-files.zip).
-3. Go to the directory of the cloned project
-4. Copy the latest code to the server: If there is an existing old cockroachdb in the server, run `rm -rf cockroachdb` first to remove it. <br>
+3. Go to the directory of the cloned project 
+4. Copy the latest code to the server, inside `/temp` directory: If there is an existing old cockroachdb in the server, run `rm -rf cockroachdb` first to remove it. <br>
  Then run `scp –r cockroachdb cs4224j@xcnc20.comp.nus.edu.sg:~/cockroachdb`
-5. Run `ls -l` and check that file permissions are `rwx------`. If it is not, run `chmod -R 700 cockroachdb`. 
+5. Copy the scripts files as mentioned below from cockroachdb project folder to be inside the /temp directory, on the same level as cockroachdb project folder
+- start-cockroach-node1.sh
+- start-cockroach-node2.sh
+- start-cockroach-node3.sh
+- start-cockroach-node4.sh
+- start-cockroach-node5.sh
+- start-experiment.sh
+6. Run `ls -l` and check that files permissions are `rwx------`. If it is not, run `chmod -R 700 cockroachdb`. 
 
-**Compiling the project on the server**
-1. ssh into one server `ssh cs4224j@xcnc20.comp.nus.edu.sg`
-2. Run `cd cockroachdb` to enter the project directory 
-3. Build the project by `mvn clean dependency:copy-dependencies package`
-
-**Create Tables and Loading data on the server**
-1. `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData` <br>
->Note that step 1 drops all existing tables and create new ones
-
-**Starting Cockroachdb**
+**Starting Cockroachdb on the servers**
 1. ssh into all xcnc20-24 servers on 5 different terminals
     - ssh cs4224j@xcnc20.comp.nus.edu.sg
     - ssh cs4224j@xcnc21.comp.nus.edu.sg
@@ -50,24 +49,36 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - ssh cs4224j@xcnc23.comp.nus.edu.sg
     - ssh cs4224j@xcnc24.comp.nus.edu.sg
 2. Set up and build the nodes for cockroachdb cluster. Depending on how many nodes you want to add, follow the steps below in order. 
-    - From one of the server machine, delete all the folders names cockroach-data, node1, node2, ...node 5. `rm -rf node1` IF you have issues deleting it try `pkill cockroach`
-    - run `./start-cockroach-node1.sh` for xcnc20 (Node1) <br>
-    - run `./start-cockroach-node2.sh` for xcnc21 (Node2) <br> 
-    - run `./start-cockroach-node3.sh` for xcnc22 (Node3) <br>   
-    - run `./start-cockroach-node4.sh` for xcnc23 (Node4) <br>  
-    - run `./start-cockroach-node5.sh` for xcnc24 (Node5) <br> 
+    - From one of the server machine inside `/temp` directory, delete all the folders names node1, node2, ...node 5 if you want to have a clean database. `rm -rf node1` If you have issues deleting it, go to the last section of the README to kill the running process.
+    - run `./start-cockroach-node1.sh` on server xcnc20 (Node1) <br>
+    - run `./start-cockroach-node2.sh` on server xcnc21 (Node2) <br> 
+    - run `./start-cockroach-node3.sh` on server xcnc22 (Node3) <br>   
+    - run `./start-cockroach-node4.sh` on server xcnc23 (Node4) <br>  
+    - run `./start-cockroach-node5.sh` on server xcnc24 (Node5) <br> 
     - If you have not initialised the cluster before, run `cockroach init --insecure` on either of the servers eg, xcnc20 <br> 
 3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
+4. You will also see new folders titled node1, node2, node3...node5 being created inside the /temp directory.
 
->To change the contents in the script, make sure you change it directly on the server itself. The script is not runnable if it is written in for eg, window env and uploaded onto the server.
 >Check that file scripts permissions are `rwx------`
-> If you experience any problems whereby ports have been binded, you can refer to the last section of the readme to find out how to kill the process.
+>If you experience any problems whereby ports have been binded, you can refer to the last section of the readme to find out how to kill the process.
 
-**Running an experiment**
+**Compiling the project on the server**
+1. ssh into one server `ssh cs4224j@xcnc20.comp.nus.edu.sg`
+2. Inside `/temp` directory, run `cd cockroachdb` to enter the project directory 
+3. Build the project by `mvn clean dependency:copy-dependencies package`
+
+// TODO: Remove the section below
+**Create Tables and Loading data on the server**
+1. `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData` <br>
+>Note that step 1 drops all existing tables and create new ones
+
+**Running an experiment from your local computer**
+0. If you are running on a Windows computer, open Ubuntu App CMD (or download from the store) as the commands below are for linux.
 1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
-2. Locally, in the root directory of the project, run `./start-experiment.sh password numOfClients`, 
-replacing `password` with the password to the servers, `numOfClients` with 20 or 40.
+2. Locally, in the root directory of the project (the one you cloned) in your local computer, run `./start-experiment.sh password numOfServers numOfClients`, 
+replacing `password` with the password to the servers, `numOfServers` with 4 or 5,`numOfClients` with 20 or 40.
 3. Output written to stdout can be found in `log/i.out.log` and output written to stderr can be found in `log/i.err.log` where i is the client number.
+>Note that step2 will perform the steps to drop all existing tables, create new ones and load data into the cockroach database and then simulating an experiment according to the parameters input. 
 
 **Generating statistics after an experiment**
 
@@ -117,5 +128,17 @@ Set the first column to be this experiment number. <br>
 - More on Cockroachdb commands: https://www.bookstack.cn/read/CockroachDB/952e033fddd3295f.md
 
 ## Notes about using soc cluster server
-- To view the processes, type the command `ps -ef | grep username`. The second column contains the pid.
+
+##### To kill running processes
+- To view the processes, type the command `ps -ef | grep username`. 
+- If you want to kill the cockroach node process, search for the row with the word cockroachdb.
+- The second column contains the pid.
 - To kill it, type `kill -9 pid`
+
+##### Use Screen tool to recover server state in the event of lost connection
+ 
+##### Note that the script is not runnable if it is written in for eg, window environment and uploaded onto the server. If you make any edits to the script, be sure to open the file on the server with the following commands to make it a unix file
+- `vim fileName`
+- `:set ff=unix` 
+
+ 
