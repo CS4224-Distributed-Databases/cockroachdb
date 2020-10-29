@@ -42,7 +42,7 @@ public class TotalStatsRunner {
         double totalThroughputPercentage = 0; // to calculate average later
 
         for (int i = 1; i <= numClients; i++) {
-            String fileName = "log/" + i + ".err.log";
+            String fileName = "experiment-logs/" + i + ".err.log";
             StatsItem statsForThisClient = new StatsItem();
             statsForThisClient.clientNum = (double) i;
             try {

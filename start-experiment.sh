@@ -4,8 +4,8 @@ runExperiments() {
   # Remove old log files on each server.
   for ((i=0; i<5; i++)); do
     server="xcnc$((20 + $i % 5))"
-    sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && rm -rf log && mkdir log"
-    echo "Remove old logs"
+    sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && rm -rf experiment-logs && mkdir experiment-logs"
+    echo "Remove old experiment-logs"
   done
 
   # $2 is number of clients
@@ -15,11 +15,9 @@ runExperiments() {
   	echo "Assign client $i on $server"
   	
   	input_file="src/main/java/DataSource/xact-files/${i}.txt"
-  	stdout_file="log/${i}.out.log"
-  	stderr_file="log/${i}.err.log"
+  	stdout_file="experiment-logs/${i}.out.log"
+  	stderr_file="experiment-logs/${i}.err.log"
 
-  	echo "Create Data and Load Data into Database via InitialiseData function"
-  	sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData"
   	echo "Start running transactions via Main function"
   	sshpass -p $1 ssh cs4224j@$server.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. Main ${input_file} > ${stdout_file} 2> ${stderr_file} &" > /dev/null 2>&1 &
   	
@@ -57,10 +55,10 @@ loadDataToDatabaseFromExternFolder() {
 ## $1: Password, $2 Number of clients: 20/40, $3 number of servers: 4/5
 echo "Starting to load data-files into all nodes' /extern directory"
 # Currently $1 is not in used because sshpass is not working
-createExternFolderToStoreCSV $1
+# createExternFolderToStoreCSV $1
 
 echo "Load data-files into cockroachdb database.....call InitialiseData File Code in the Project"
-loadDataToDatabaseFromExternFolder
+# loadDataToDatabaseFromExternFolder
 
 echo "Start Experiment. Please key in parameters with the first being the number of clients followed by number of servers"
 echo "starting to run with $2 number of clients"
