@@ -28,9 +28,9 @@ public class CreateTables {
 
     // Need to drop tables with FK dependencies first
     public void dropTables(){
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsPairView");
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderItemsView");
-        runSQL("DROP VIEW IF EXISTS CS4224.CustomerOrderView");
+        runSQL("DROP VIEW IF EXISTS CustomerOrderItemsPairView");
+        runSQL("DROP VIEW IF EXISTS CustomerOrderItemsView");
+        runSQL("DROP VIEW IF EXISTS CustomerOrderView");
 
         runSQL("DROP TABLE IF EXISTS OrderLine");
         runSQL("DROP TABLE IF EXISTS Stock");
@@ -63,7 +63,7 @@ public class CreateTables {
     };
 
     public void createOrder(){
-        runSQL("CREATE TABLE IF NOT EXISTS Order_New (O_ID INT UNIQUE NOT NULL, O_W_ID INT NOT NULL, " +
+        runSQL("CREATE TABLE IF NOT EXISTS Order_New (O_ID INT NOT NULL, O_W_ID INT NOT NULL, " +
                 "O_D_ID INT NOT NULL, O_C_ID INT NOT NULL, O_CARRIER_ID INT, " +
                 "O_OL_CNT DECIMAL, O_ALL_LOCAL DECIMAL, O_ENTRY_D TIMESTAMP, PRIMARY KEY(O_ID, O_W_ID, O_D_ID), " +
                 "FOREIGN KEY(O_C_ID, O_W_ID, O_D_ID) REFERENCES Customer (C_ID, C_W_ID, C_D_ID))");
@@ -96,20 +96,20 @@ public class CreateTables {
         // Note that cannot use * which is not yet implemented in views
 
         //used by both
-        runSQL("CREATE VIEW CS4224.CustomerOrderView(CO_O_ID, CO_O_ENTRY_D, CO_C_ID, CO_W_ID, CO_D_ID, CO_C_FIRST, CO_C_MIDDLE, CO_C_LAST) " +
-                "AS SELECT CS4224.Order_New.O_ID, CS4224.Order_New.O_ENTRY_D, CS4224.Customer.C_ID, CS4224.Customer.C_W_ID, CS4224.Customer.C_D_ID, CS4224.Customer.C_FIRST, CS4224.Customer.C_MIDDLE, CS4224.Customer.C_LAST FROM " +
-                "CS4224.Customer JOIN CS4224.Order_New ON CS4224.Customer.C_ID = CS4224.Order_New.O_C_ID");
+        runSQL("CREATE VIEW CustomerOrderView(CO_O_ID, CO_O_ENTRY_D, CO_C_ID, CO_W_ID, CO_D_ID, CO_C_FIRST, CO_C_MIDDLE, CO_C_LAST) " +
+                "AS SELECT Order_New.O_ID, Order_New.O_ENTRY_D, Customer.C_ID, Customer.C_W_ID, Customer.C_D_ID, Customer.C_FIRST, Customer.C_MIDDLE, Customer.C_LAST FROM " +
+                "Customer JOIN Order_New ON Customer.C_ID = Order_New.O_C_ID");
 
         //used by both
-        runSQL("CREATE VIEW CS4224.CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID, COI_O_ID) " +
-                "AS SELECT CS4224.CustomerOrderView.CO_C_ID, CS4224.CustomerOrderView.CO_W_ID, CS4224.CustomerOrderView.CO_D_ID, CS4224.OrderLine.OL_I_ID, CS4224.OrderLine.OL_O_ID " +
-                "FROM CS4224.CustomerOrderView JOIN CS4224.OrderLine ON CS4224.CustomerOrderView.CO_O_ID = CS4224.OrderLine.OL_O_ID");
+        runSQL("CREATE VIEW CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID, COI_O_ID) " +
+                "AS SELECT CustomerOrderView.CO_C_ID, CustomerOrderView.CO_W_ID, CustomerOrderView.CO_D_ID, OrderLine.OL_I_ID, OrderLine.OL_O_ID " +
+                "FROM CustomerOrderView JOIN OrderLine ON CustomerOrderView.CO_O_ID = OrderLine.OL_O_ID");
 
         // Used by RelatedCustomer
         // Here, we pair customers who have different customer IDs, different warehouse Ids and buys the same items
-        runSQL("CREATE VIEW CS4224.CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, COI_I_ID_One, C_ID_Two, W_ID_Two, D_ID_Two, COI_I_ID_Two) " +
+        runSQL("CREATE VIEW CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, COI_I_ID_One, C_ID_Two, W_ID_Two, D_ID_Two, COI_I_ID_Two) " +
                 "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
-                "FROM CS4224.CustomerOrderItemsView AS first JOIN CS4224.CustomerOrderItemsView AS second " +
+                "FROM CustomerOrderItemsView AS first JOIN CustomerOrderItemsView AS second " +
                 "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID AND first.COI_W_ID <> second.COI_W_ID");
 
 

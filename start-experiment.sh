@@ -43,6 +43,15 @@ buildProject() {
   fi
 }
 
+# Upload csv datafiles to node to use IMPORT INTO fast load
+uploadDataToNodes() {
+  sshpass -p "$1" ssh cs4224j@xcnc20.comp.nus.edu.sg "mkdir node1/extern/; cp cockroach/main/java/DataSource/* ~/node1/extern;"
+  echo "Uploaded data into node3"
+}
+
+echo "Starting to load data-files into all nodelocal"
+uploadDataToNodes $1
+
 echo "Starting to build on all servers"
 # $1: Password, $2: Number of servers, could be 4 or 5
 buildProject $1 $2
