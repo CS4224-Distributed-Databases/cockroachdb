@@ -60,13 +60,11 @@ public class NewOrderTransaction extends BaseTransaction{
             PreparedStatement q1 = connection.prepareStatement("SELECT * from District where D_ID = ? AND D_W_ID = ?");
             q1.setInt(1, customerDistrictId);
             q1.setInt(2, customerWarehouseId);
-            String[] districtInfo = {""};
-            int orderNumber = 0;
-            if (q1.execute()){
-                ResultSet r1 = q1.getResultSet();
-                districtInfo = new FormResults().formResults(r1).get(0).split(",");
-                orderNumber = Integer.parseInt(districtInfo[10]);
-            }
+            q1.execute();
+            ResultSet r1 = q1.getResultSet();
+            String[] districtInfo = new FormResults().formResults(r1).get(0).split(",");
+            int orderNumber = Integer.parseInt(districtInfo[10]);
+
 
             // (2) Update D_NEXT_O_ID
             PreparedStatement q2 = connection.prepareStatement("UPDATE District SET D_NEXT_O_ID = ? where D_ID = ? AND D_W_ID = ?");
@@ -89,9 +87,7 @@ public class NewOrderTransaction extends BaseTransaction{
                 PreparedStatement q3 = connection.prepareStatement("SELECT * from Stock where S_I_ID = ? AND S_W_ID = ?");
                 q3.setInt(1, itemNumber);
                 q3.setInt(2, supplierWarehouse);
-                if (!q3.execute()) {
-                    continue;
-                }
+                q3.execute();
                 ResultSet r3 = q3.getResultSet();
                 String [] stockInfo = new FormResults().formResults(r3).get(0).split(",");
 
@@ -121,18 +117,14 @@ public class NewOrderTransaction extends BaseTransaction{
                 q4.setInt(4, newRemoteCount);
                 q4.setInt(5, supplierWarehouse);
                 q4.setInt(6, itemNumber);
-                if (!q4.execute()){
-                    continue;
-                }
+                q4.execute();
 
-                PreparedStatement q5 = connection.prepareStatement("SELECT I_PRICE from Item where I_ID = ?");
+                PreparedStatement q5 = connection.prepareStatement("SELECT * from Item where I_ID = ?");
                 q5.setInt(1, itemNumber);
-                if (!q5.execute()) {
-                    continue;
-                }
-
+                q5.execute();
                 ResultSet r5 = q5.getResultSet();
                 String[] itemInfo = new FormResults().formResults(r5).get(0).split(",");
+
                 BigDecimal itemPrice = DatatypeConverter.parseDecimal(itemInfo[2]);
                 BigDecimal itemAmount = itemPrice.multiply(quantity);
                 totalAmount = totalAmount.add(itemAmount);
@@ -157,9 +149,7 @@ public class NewOrderTransaction extends BaseTransaction{
                 q6.setInt(8, supplierWarehouse);
                 q6.setBigDecimal(9, quantity);
                 q6.setString(10, sDistInfo);
-                if (!q6.execute()) {
-                    continue;
-                }
+                q6.execute();
             }
 
             // Get Warehouse tax
@@ -171,13 +161,14 @@ public class NewOrderTransaction extends BaseTransaction{
 
             //3. compute total amount
             BigDecimal districtTax = DatatypeConverter.parseDecimal(districtInfo[8]);
-            PreparedStatement q8 = connection.prepareStatement("SELECT * from Customer where C_ID = ?, C_W_ID = ?, C_D_ID = ?");
+            PreparedStatement q8 = connection.prepareStatement("SELECT * from Customer where C_ID = ? AND C_W_ID = ? AND C_D_ID = ?");
             q8.setInt(1, customerId);
             q8.setInt(2, customerWarehouseId);
             q8.setInt(3, customerDistrictId);
             q8.execute();
             ResultSet r8 = q8.getResultSet();
-            String [] customerInfo = new FormResults().formResults(r8).get(0).split(",");
+            ArrayList<String> cus = new FormResults().formResults(r8);
+            String [] customerInfo = cus.get(0).split(",");
             BigDecimal customerDiscount = DatatypeConverter.parseDecimal(customerInfo[15]);
             BigDecimal totalTaxes = BigDecimal.ONE.add(districtTax.add(warehouseTax));
             totalAmount = totalAmount.multiply(totalTaxes.multiply(BigDecimal.ONE.subtract(customerDiscount)));
@@ -194,7 +185,7 @@ public class NewOrderTransaction extends BaseTransaction{
             q9.setInt(2, customerWarehouseId);
             q9.setInt(3, customerDistrictId);
             q9.setInt(4, customerId);
-            q9.setInt(5, Integer.parseInt(null));
+            q9.setObject(5, null);
             q9.setBigDecimal(6, new BigDecimal(numOfItems));
             q9.setBigDecimal(7, isAllLocal);
             q9.setTimestamp(8, Timestamp.valueOf(entryDateStr));
@@ -209,6 +200,7 @@ public class NewOrderTransaction extends BaseTransaction{
             System.out.println(String.format("3. O_ID: %d, O_ENTRY_D: %s", orderNumber, entryDateStr));
             System.out.println(String.format("4. NUM_ITEMS: %d, TOTAL_AMOUNT: %.2f", numOfItems, totalAmount));
             System.out.println("5. Each item:");
+
             for(int i = 0; i < numOfItems; i++) {
                 System.out.println(String.format(
                         "\t ITEM_NUMBER: %d, I_NAME: %s, SUPPLIER_WAREHOUSE: %d, QUANTITY: %.0f, OL_AMOUNT: %.2f, S_QUANTITY: %.0f",

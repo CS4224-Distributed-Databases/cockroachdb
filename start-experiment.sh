@@ -7,7 +7,7 @@ runExperiments() {
   sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; rm -rf temp/cockroachdb/src/main/java/experiment-logs; mkdir temp/cockroachdb/src/main/java/experiment-logs"
 
   # Compilation of code -> Uncomment for debug if we are only running this function
-  # sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && mvn clean dependency:copy-dependencies package;"
+  sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && mvn clean dependency:copy-dependencies package;"
 
   # $2 is number of clients
   #iterate through each client and assign to the correct server to run
