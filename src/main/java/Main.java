@@ -52,21 +52,21 @@ public class Main {
 
             BaseTransaction transaction = null;
             if (inputLine.startsWith("N")) {
-                 transaction = new NewOrderTransaction(ds);
+                 // transaction = new NewOrderTransaction(ds);
             } else if (inputLine.startsWith("P")) {
-                transaction = new PaymentTransaction(ds);
+                // transaction = new PaymentTransaction(ds);
             } else if (inputLine.startsWith("D")) {
-                transaction = new DeliveryTransaction(ds);
+                // transaction = new DeliveryTransaction(ds);
             } else if (inputLine.startsWith("O")) {
-                transaction = new OrderStatusTransaction(ds);
+                // transaction = new OrderStatusTransaction(ds);
             } else if (inputLine.startsWith("S")) {
-                transaction = new StockLevelTransaction(ds);
+                // transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
                  transaction = new PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
-                transaction = new TopBalanceTransaction(ds);
+                // transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-                transaction = new RelatedCustomerTransaction(ds);
+                // transaction = new RelatedCustomerTransaction(ds);
             }
 
             if (transaction != null) {

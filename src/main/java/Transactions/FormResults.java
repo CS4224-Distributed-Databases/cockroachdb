@@ -22,7 +22,6 @@ public class FormResults {
                 } else {
                     row += resultSet.getObject(i) + ",";
                 }
-                System.out.print(resultSet.getObject(i));
             }
             result.add(row);
         }

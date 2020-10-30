@@ -28,7 +28,6 @@ runExperiments() {
 
   	echo "Start running transactions via Main function"
     sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. Main $nodeid < ${input_file} > ${stdout_file} 2> ${stderr_file} &"> /dev/null 2>&1
-
   	echo "Finish running ${i+1} transaction file on $server"
   done
 }
