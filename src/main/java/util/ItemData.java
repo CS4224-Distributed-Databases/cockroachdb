@@ -20,7 +20,7 @@ public class ItemData {
         if (obj == this) {
             return true;
         }
-        return this.itemId == ((ItemData) obj).itemId && this.itemName == ((ItemData) obj).itemName;
+        return this.itemId == ((ItemData) obj).itemId && this.itemName.equals(((ItemData) obj).itemName);
     }
 
     @Override

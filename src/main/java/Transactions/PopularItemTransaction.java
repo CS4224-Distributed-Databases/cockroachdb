@@ -76,7 +76,7 @@ public class PopularItemTransaction extends BaseTransaction{
                 System.out.println(String.format("\t3.2 Customer: (%s, %s, %s)", orderInfo[2], orderInfo[3], orderInfo[4]));
                 System.out.println("\t3.3 Popular Items: ");
 
-                // (3) For each order,get the items with highest OL_QUANTITY among all orderlines with this o_id
+                // (3) For each order, get the items with highest OL_QUANTITY among all orderlines with this o_id
                 // Join the orderline OL with item I on OL.OL_I_ID = I.I_ID (want to produce I_ID, I_NAME and OL_QUANTITY)
 
                 String orderLineItemQuery = "SELECT I.I_ID, I.I_NAME, OL.OL_QUANTITY " +
