@@ -5,8 +5,7 @@ import DataLoader.LoadData;
 import org.postgresql.ds.PGSimpleDataSource;
 
 public class InitialiseData {
-
-    private static String DIRECTORY = "src/main/java/";
+    
     private static PGSimpleDataSource ds;
 
     public static void main(String[] args)  throws Exception {

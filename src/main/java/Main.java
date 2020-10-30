@@ -6,7 +6,6 @@ import org.postgresql.ds.PGSimpleDataSource;
 
 public class Main {
 
-    private static String DIRECTORY = "src/main/java/";
     private static PGSimpleDataSource ds;
 
     private static final double convertSecondsDenom = 1000000000.0;
@@ -21,16 +20,9 @@ public class Main {
     }};
 
     public static void main(String[] args)  throws Exception {
-
-        String inputFile = args[0];
-        String outputFile = args[1];
-        String errorFile = args[2];
-        int nodeID = Integer.parseInt(args[3]);
-
-        System.out.println(inputFile);
-        System.out.println(outputFile);
-        System.out.println(errorFile);
-
+        int nodeID = Integer.parseInt(args[0]);
+   
+        System.out.println("Running code on node "+nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
         // ds.setServerName("192.168.48.169"); //originally localhost
