@@ -76,16 +76,23 @@ public class PopularItemTransaction extends BaseTransaction{
                 System.out.println(String.format("\t3.2 Customer: (%s, %s, %s)", orderInfo[2], orderInfo[3], orderInfo[4]));
                 System.out.println("\t3.3 Popular Items: ");
 
-                // (3) For each order,get the items with highest OL_QUANTITY among all orderlines with this o_id
+                // (3) For each order, get the items with highest OL_QUANTITY among all orderlines with this o_id
                 // Join the orderline OL with item I on OL.OL_I_ID = I.I_ID (want to produce I_ID, I_NAME and OL_QUANTITY)
 
                 String orderLineItemQuery = "SELECT I.I_ID, I.I_NAME, OL.OL_QUANTITY " +
                         "FROM CS4224.OrderLine AS OL JOIN CS4224.Item AS I ON OL.OL_I_ID = I.I_ID " +
-                        "WHERE OL.OL_O_ID = ? AND OL.OL_QUANTITY = " +
-                        "(SELECT MAX(OL_2.OL_QUANTITY) FROM CS4224.OrderLine AS OL_2 WHERE OL_2.OL_O_ID = ?)";
+                        "WHERE OL.OL_W_ID = ? AND OL.OL_D_ID = ? AND " +
+                        "OL.OL_O_ID = ? AND OL.OL_QUANTITY = " +
+                        "(SELECT MAX(OL_2.OL_QUANTITY) FROM CS4224.OrderLine AS OL_2 " +
+                        "WHERE OL_2.OL_O_ID = ? AND OL_2.OL_W_ID = ? AND OL_2.OL_D_ID = ?)";
                 PreparedStatement q3 = connection.prepareStatement(orderLineItemQuery);
-                q3.setInt(1, orderNum);
-                q3.setInt(2, orderNum);
+                q3.setInt(1, warehouseId);
+                q3.setInt(2, districtId);
+                q3.setInt(3, orderNum);
+                q3.setInt(4, orderNum);
+                q3.setInt(5, warehouseId);
+                q3.setInt(6, districtId);
+
                 q3.execute();
                 ResultSet r3 = q3.getResultSet();
                 ArrayList<String> itemsList = new FormResults().formResults(r3);
