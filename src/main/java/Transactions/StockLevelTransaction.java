@@ -49,7 +49,7 @@ public class StockLevelTransaction extends BaseTransaction {
             Integer startingFromOrder = nextOID - ordersToExamine;
 
             // Query 2: Get the set of item from last L orders
-            PreparedStatement q2 = connection.prepareStatement("SELECT ol_i_id FROM order_line WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id >= ? AND ol_o_id < ?");
+            PreparedStatement q2 = connection.prepareStatement("SELECT ol_i_id FROM OrderLine WHERE ol_w_id = ? AND ol_d_id = ? AND ol_o_id >= ? AND ol_o_id < ?");
             q2.setInt(1, warehouseId);
             q2.setInt(2, districtId);
             q2.setInt(3, startingFromOrder);

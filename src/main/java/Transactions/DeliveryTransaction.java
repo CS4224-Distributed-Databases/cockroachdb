@@ -39,8 +39,8 @@ public class DeliveryTransaction extends BaseTransaction{
 
             PreparedStatement q1 = connection.prepareStatement("SELECT O_ID, O_C_ID from Order_New WHERE O_W_ID = ? AND O_D_ID = ? AND O_CARRIER_ID IS NULL ORDER BY O_ID ASC LIMIT 1");
             PreparedStatement q2 = connection.prepareStatement("UPDATE Order_New SET O_CARRIER_ID = ? WHERE O_ID = ?");
-            PreparedStatement q3 = connection.prepareStatement("SELECT OL_NUMBER, OL_AMOUNT from Order_Line WHERE OL_O_ID = ?");
-            PreparedStatement q4 = connection.prepareStatement("UPDATE Order_Line SET OL_DELIVERY_D = ? WHERE OL_NUMBER = ?");
+            PreparedStatement q3 = connection.prepareStatement("SELECT OL_NUMBER, OL_AMOUNT from OrderLine WHERE OL_O_ID = ?");
+            PreparedStatement q4 = connection.prepareStatement("UPDATE OrderLine SET OL_DELIVERY_D = ? WHERE OL_NUMBER = ?");
             PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? AND C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ?");
 
             for (int i = 1; i <= NUM_DISTRICTS; i++) {
