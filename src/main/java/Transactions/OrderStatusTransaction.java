@@ -50,9 +50,9 @@ public class OrderStatusTransaction extends BaseTransaction{
             String customerFirstName = customerInfo[0];
             String customerMiddleName = customerInfo[1];
             String customerLastName = customerInfo[2];
-            String customerBalance =  customerInfo[3];
+            Double customerBalance = Double.parseDouble(customerInfo[3]);
 
-            System.out.printf("Customer name: %s %s %s, balance: %s\n",
+            System.out.printf("Customer name: %s %s %s, balance: %f\n",
                     customerFirstName,
                     customerMiddleName,
                     customerLastName,
