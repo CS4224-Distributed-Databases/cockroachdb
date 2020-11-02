@@ -139,10 +139,10 @@ public class NewOrderTransaction extends BaseTransaction{
                         "OL_D_ID, OL_O_ID, OL_I_ID, OL_DELIVERY_D, OL_AMOUNT," +
                         " OL_SUPPLY_W_ID, OL_QUANTITY, OL_DIST_INFO) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                q6.setInt(1, orderNumber);
+                q6.setInt(1, i+1);
                 q6.setInt(2, customerWarehouseId);
                 q6.setInt(3, customerDistrictId);
-                q6.setInt(4, i+1);
+                q6.setInt(4, orderNumber);
                 q6.setInt(5, itemNumber);
                 q6.setTimestamp(6, null);
                 q6.setBigDecimal(7, itemAmount);
