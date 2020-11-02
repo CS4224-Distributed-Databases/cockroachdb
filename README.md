@@ -75,21 +75,21 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
 **Running an experiment from your local computer**
 0. If you are running on a Windows computer, open Ubuntu App CMD (or download from the store) as the commands below are for linux.
 1. Ensure you have sshpass installed in your computer. Otherwise run `sudo apt install sshpass`
-2. Locally, in the root directory of the project (the one you cloned) in your local computer, run `./start-experiment.sh password numOfServers numOfClients`, 
-replacing `password` with the password to the servers, `numOfServers` with 4 or 5,`numOfClients` with 20 or 40.
+2. Locally, in the root directory of the project (the one you cloned) in your local computer, run `./start-experiment.sh password numOfClients numOfServers`, 
+replacing `password` with the password to the servers, `numOfClients` with 20 or 40, `numOfServers` with 4 or 5.
 3. Output written to stdout can be found in `experiment-logs/i.out.log` and output written to stderr can be found in `experiment-logs/i.err.log` where i is the client number.
 >Note that step2 will perform the steps to drop all existing tables, create new ones and load data into the cockroach database and then simulating an experiment according to the parameters input. 
 
 **Generating statistics after an experiment**
 
 *Generate the Database state*
-1. run `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. EndStateRunner`
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner`
 2. Open `output/end_state.csv` file
 3. Manually copy the results into a row of the main `db-state.csv` which records all db end state for all experiments. 
 Set the first column to be this experiment number. 
 
 *Generate Performance and Throughput Statistics*
-1. run `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. TotalStatsRunner`
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. TotalStatsRunner`
 2. For Throughput Statistics: <br>
 2.1 Open `output/throughput_stats.csv` file <br>
 2.2 Manually copy the results into a row of the main `throughput.csv` which records all min, avg and max throughputs for all experiments. 
