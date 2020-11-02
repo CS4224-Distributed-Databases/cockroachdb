@@ -3,6 +3,7 @@ package Transactions;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import javax.xml.bind.DatatypeConverter;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -73,12 +74,12 @@ public class DeliveryTransaction extends BaseTransaction{
                     // Update DELIVERY_OL_DELIVERY_D to current date and time
                     // OL_DELIVERY_D, OL_NUMBER, OL_W_ID, OL_D_ID, OL_O_ID
                     int orderLineNumber = Integer.parseInt(orderLine.split(",")[0]);
-                    int amount = Integer.parseInt(orderLine.split(",")[1]);
+                    BigDecimal amount = DatatypeConverter.parseDecimal(orderLine.split(",")[1]);
 
                     q4.setTimestamp(1, time);
                     q4.setInt(2, orderLineNumber);
                     // Sum the amount from all orderLines
-                    orderLineAmount = orderLineAmount.add(new BigDecimal(amount));
+                    orderLineAmount = orderLineAmount.add(amount);
                 }
 
                 // 4: Update balance and delivery count for customer C
