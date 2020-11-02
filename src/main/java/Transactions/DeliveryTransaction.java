@@ -45,7 +45,7 @@ public class DeliveryTransaction extends BaseTransaction{
             PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? AND C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ?");
 
             for (int i = 1; i <= NUM_DISTRICTS; i++) {
-                // (1) Obtain D_NEXT_O_ID
+                // (1) Obtain O_ID and O_C_ID
                 q1.setInt(1, warehouseID);
                 q1.setInt(2, i);
                 q1.execute();
@@ -78,6 +78,7 @@ public class DeliveryTransaction extends BaseTransaction{
 
                     q4.setTimestamp(1, time);
                     q4.setInt(2, orderLineNumber);
+                    q4.execute();
                     // Sum the amount from all orderLines
                     orderLineAmount = orderLineAmount.add(amount);
                 }
