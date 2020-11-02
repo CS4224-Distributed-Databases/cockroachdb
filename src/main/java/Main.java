@@ -11,7 +11,7 @@ public class Main {
     private static final double convertSecondsDenom = 1000000000.0;
     private static final double convertMilliSecondsDenom = 1000000.0;
 
-    private static ArrayList<String> IPAddresses = new ArrayList<String>(){{
+    private static ArrayList<String> IPAddresses = new ArrayList<String>() {{
         add("192.168.48.169");
         add("192.168.48.170");
         add("192.168.48.171");
@@ -19,15 +19,15 @@ public class Main {
         add("192.168.48.173");
     }};
 
-    public static void main(String[] args)  throws Exception {
+    public static void main(String[] args) throws Exception {
         int nodeID = Integer.parseInt(args[0]);
-   
-        System.out.println("Running code on node "+nodeID);
+
+        System.out.println("Running code on node " + nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
         // ds.setServerName("192.168.48.169"); //originally localhost
         // ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://"+IPAddresses.get(nodeID)+":26257/?sslmode=disable");
+        ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + ":26257/?sslmode=disable");
 
 
         System.out.println(ds.getDescription());
@@ -52,21 +52,21 @@ public class Main {
 
             BaseTransaction transaction = null;
             if (inputLine.startsWith("N")) {
-                 // transaction = new NewOrderTransaction(ds);
+                transaction = new NewOrderTransaction(ds);
             } else if (inputLine.startsWith("P")) {
-                // transaction = new PaymentTransaction(ds);
+                transaction = new PaymentTransaction(ds);
             } else if (inputLine.startsWith("D")) {
-                // transaction = new DeliveryTransaction(ds);
+                transaction = new DeliveryTransaction(ds);
             } else if (inputLine.startsWith("O")) {
-                // transaction = new OrderStatusTransaction(ds);
+                transaction = new OrderStatusTransaction(ds);
             } else if (inputLine.startsWith("S")) {
-                // transaction = new StockLevelTransaction(ds);
+                transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
-                 transaction = new PopularItemTransaction(ds);
+                transaction = new PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
-                // transaction = new TopBalanceTransaction(ds);
+                transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-                // transaction = new RelatedCustomerTransaction(ds);
+                transaction = new RelatedCustomerTransaction(ds);
             }
 
             if (transaction != null) {
@@ -93,7 +93,7 @@ public class Main {
 
     }
 
-    public static void runSQL(String sqlCode){
+    public static void runSQL(String sqlCode) {
         System.out.println(sqlCode);
         try (Connection connection = ds.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(sqlCode);
