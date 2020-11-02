@@ -60,7 +60,7 @@ public class OrderStatusTransaction extends BaseTransaction{
 
 
             // Print out customer's last order X details
-            PreparedStatement q2 = connection.prepareStatement("SELECT O_ID, O_ENTRY_D, O_CARRIER_ID from Order WHERE O_C_ID = ? ORDER BY O_ID DESC LIMIT 1");
+            PreparedStatement q2 = connection.prepareStatement("SELECT O_ID, O_ENTRY_D, O_CARRIER_ID from Order_New WHERE O_C_ID = ? ORDER BY O_ID DESC LIMIT 1");
             q2.setInt(1, customerId);
             q2.execute();
             ResultSet r2 = q2.getResultSet();
