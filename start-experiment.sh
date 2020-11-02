@@ -13,7 +13,8 @@ runExperiments() {
   #iterate through each client and assign to the correct server to run
   for ((i=0; i<$2; i++)); do
     logIndex=$(($i + 1))
-    nodeid=$(($i % 5)) # Used to pass inside Main Function so we know which node's IP address to connect to
+    # $3 contains the number of servers to run on
+    nodeid=$(($i % $3)) # Used to pass inside Main Function so we know which node's IP address to connect to
     serverID=$((20 + nodeid))
   	server="xcnc${serverID}"
   	echo "Assign client $i on $server"
