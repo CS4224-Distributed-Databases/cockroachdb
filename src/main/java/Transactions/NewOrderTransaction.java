@@ -73,6 +73,22 @@ public class NewOrderTransaction extends BaseTransaction{
             q2.setInt(3, customerWarehouseId);
             q2.execute();
 
+            // Create Order
+            Date entryDate = new Date();
+            String entryDateStr = TimeHelper.formatDate(entryDate);
+            PreparedStatement q9 = connection.prepareStatement("INSERT INTO Order_New (O_ID, O_W_ID, " +
+                    "O_D_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            q9.setInt(1, orderNumber);
+            q9.setInt(2, customerWarehouseId);
+            q9.setInt(3, customerDistrictId);
+            q9.setInt(4, customerId);
+            q9.setObject(5, null);
+            q9.setBigDecimal(6, new BigDecimal(numOfItems));
+            q9.setBigDecimal(7, BigDecimal.ONE); // set isAllLocal to dummy value 1 first
+            q9.setTimestamp(8, Timestamp.valueOf(entryDateStr));
+            q9.execute();
+
             // (3) Iterate through all Items
             BigDecimal totalAmount = new BigDecimal(0);
             BigDecimal isAllLocal = BigDecimal.ONE;
@@ -174,22 +190,14 @@ public class NewOrderTransaction extends BaseTransaction{
             totalAmount = totalAmount.multiply(totalTaxes.multiply(BigDecimal.ONE.subtract(customerDiscount)));
             String customerLastName = customerInfo[5];
 
-            //4. Create Order
-            // brought to the end after creating all order lines to avoid an extra iteration for checking if warehouses are local
-            Date entryDate = new Date();
-            String entryDateStr = TimeHelper.formatDate(entryDate);
-            PreparedStatement q9 = connection.prepareStatement("INSERT INTO Order_New (O_ID, O_W_ID, " +
-                    "O_D_ID, O_C_ID, O_CARRIER_ID, O_OL_CNT, O_ALL_LOCAL, O_ENTRY_D)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            q9.setInt(1, orderNumber);
-            q9.setInt(2, customerWarehouseId);
-            q9.setInt(3, customerDistrictId);
-            q9.setInt(4, customerId);
-            q9.setObject(5, null);
-            q9.setBigDecimal(6, new BigDecimal(numOfItems));
-            q9.setBigDecimal(7, isAllLocal);
-            q9.setTimestamp(8, Timestamp.valueOf(entryDateStr));
-            q9.execute();
+            //4. Update Order after checking if warehouses are local
+            PreparedStatement q10 = connection.prepareStatement("UPDATE Order_New SET O_ALL_LOCAL = ? " +
+                    "where O_ID = ? AND O_W_ID = ? AND O_D_ID = ?");
+            q10.setBigDecimal(1, isAllLocal);
+            q10.setInt(2, orderNumber);
+            q10.setInt(3, customerWarehouseId);
+            q10.setInt(4, customerDistrictId);
+            q10.execute();
 
             //4. Print output
             System.out.println(String.format(
