@@ -39,7 +39,7 @@ public class OrderStatusTransaction extends BaseTransaction{
         try(Connection connection = ds.getConnection()){
 
             // Print out customer's details
-            PreparedStatement q1 = connection.prepareStatement("SELECT C_FIRST, C_MIDDLE, C_LAST, C_BALANCE from Customer WHERE C_ID = ?, C_W_ID = ?, C_D_ID = ?");
+            PreparedStatement q1 = connection.prepareStatement("SELECT C_FIRST, C_MIDDLE, C_LAST, C_BALANCE from Customer WHERE C_ID = ? AND C_W_ID = ? AND C_D_ID = ?");
             q1.setInt(1, customerId);
             q1.setInt(2, customerWarehouseId);
             q1.setInt(3, customerDistrictId);
