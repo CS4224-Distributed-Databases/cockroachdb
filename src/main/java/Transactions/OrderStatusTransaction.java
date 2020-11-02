@@ -52,7 +52,7 @@ public class OrderStatusTransaction extends BaseTransaction{
             String customerLastName = customerInfo[2];
             String customerBalance =  customerInfo[3];
 
-            System.out.printf("Customer name: %s %s %s, balance: %f\n",
+            System.out.printf("Customer name: %s %s %s, balance: %s\n",
                     customerFirstName,
                     customerMiddleName,
                     customerLastName,
