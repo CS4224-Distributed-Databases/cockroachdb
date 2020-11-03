@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// TODO: To check if the create view statements are valid
 public class RelatedCustomerTransaction extends BaseTransaction{
 
     private DataSource ds;
@@ -34,7 +33,6 @@ public class RelatedCustomerTransaction extends BaseTransaction{
         this.customerID = Integer.parseInt(input[3]);
     }
 
-    @Override
     public void execute() {
         System.out.println("Start Related Customers...");
         try(Connection connection = ds.getConnection()) {
@@ -42,7 +40,7 @@ public class RelatedCustomerTransaction extends BaseTransaction{
             // remove relatedCus view and combine it with the query
             // because Groupby inside a view is expensive.
             String relatedCus = "SELECT C_ID_Two, W_ID_Two, D_ID_Two " +
-                    "FROM CS4224.CustomerOrderItemsFilteredView " +
+                    "FROM CustomerOrderItemsPairView " +
                     "WHERE C_ID_One = ? AND W_ID_One = ? AND D_ID_One = ? " +
                     "GROUP BY C_ID_One, W_ID_One, D_ID_One, C_ID_Two, W_ID_Two, D_ID_Two " +
                     "HAVING COUNT(*) >= 2";

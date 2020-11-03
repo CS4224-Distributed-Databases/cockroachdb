@@ -20,15 +20,15 @@ public class Main {
     }};
 
     public static void main(String[] args) throws Exception {
+
         int nodeID = Integer.parseInt(args[0]);
 
         System.out.println("Running code on node " + nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        // ds.setServerName("192.168.48.169"); //originally localhost
-        // ds.setPortNumber(26257);
+        //ds.setServerName("localhost"); //originally localhost
+        //ds.setPortNumber(26257);
         ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + ":26257/?sslmode=disable");
-
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
@@ -58,15 +58,15 @@ public class Main {
             } else if (inputLine.startsWith("D")) {
                 transaction = new DeliveryTransaction(ds);
             } else if (inputLine.startsWith("O")) {
-                transaction = new OrderStatusTransaction(ds);
-            } else if (inputLine.startsWith("S")) {
+                 transaction = new OrderStatusTransaction(ds);
+            } else if (inputLine.startsWith("S")) { // checked
                 transaction = new StockLevelTransaction(ds);
             } else if (inputLine.startsWith("I")) {
-                transaction = new PopularItemTransaction(ds);
+                 transaction = new PopularItemTransaction(ds);
             } else if (inputLine.startsWith("T")) {
                 transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-                transaction = new RelatedCustomerTransaction(ds);
+               // transaction = new RelatedCustomerTransaction(ds); // too long to execute....skipping
             }
 
             if (transaction != null) {

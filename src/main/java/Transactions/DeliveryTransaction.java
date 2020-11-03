@@ -42,7 +42,8 @@ public class DeliveryTransaction extends BaseTransaction{
             PreparedStatement q2 = connection.prepareStatement("UPDATE Order_New SET O_CARRIER_ID = ? WHERE O_ID = ?");
             PreparedStatement q3 = connection.prepareStatement("SELECT OL_NUMBER, OL_AMOUNT from OrderLine WHERE OL_O_ID = ?");
             PreparedStatement q4 = connection.prepareStatement("UPDATE OrderLine SET OL_DELIVERY_D = ? WHERE OL_NUMBER = ?");
-            PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? AND C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ?");
+            PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? WHERE C_ID = ?");
+            PreparedStatement q6 = connection.prepareStatement("UPDATE Customer SET C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ?");
 
             for (int i = 1; i <= NUM_DISTRICTS; i++) {
                 // (1) Obtain O_ID and O_C_ID
@@ -59,7 +60,6 @@ public class DeliveryTransaction extends BaseTransaction{
                 q2.setInt(1, carrierID);
                 q2.setInt(2, orderNumber);
                 q2.execute();
-
                 // (3) Update all the order lines associated with order X by setting OL DELIVERY D to the current date and time
                 q3.setInt(1, orderNumber);
                 q3.execute();
@@ -88,6 +88,9 @@ public class DeliveryTransaction extends BaseTransaction{
                 q5.setBigDecimal(1, orderLineAmount);
                 q5.setInt(2, customerNumber);
                 q5.execute();
+
+                q6.setInt(1, customerNumber);
+                q6.execute();
             }
 
 

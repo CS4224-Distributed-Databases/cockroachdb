@@ -90,6 +90,7 @@ public class PopularItemTransaction extends BaseTransaction{
                 q3.setInt(2, districtId);
                 q3.setInt(3, orderNum);
                 q3.setInt(4, orderNum);
+
                 q3.setInt(5, warehouseId);
                 q3.setInt(6, districtId);
 
@@ -124,6 +125,7 @@ public class PopularItemTransaction extends BaseTransaction{
                 q4.setInt(4, maxOrderNum);
                 q4.setInt(5, popularItemData.itemId);
                 q4.execute();
+
                 ResultSet r4 = q4.getResultSet();
                 String numOfOrdersRes = new FormResults().formResults(r4).get(0);
                 int numOfOrders = Integer.parseInt(numOfOrdersRes);
