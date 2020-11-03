@@ -67,7 +67,6 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
 2. Inside `/temp` directory, run `cd cockroachdb` to enter the project directory 
 3. Build the project by `mvn clean dependency:copy-dependencies package`
 
-// TODO: Remove the section below
 **Create Tables and Loading data on the server**
 1. `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData` <br>
 >Note that step 1 drops all existing tables and create new ones

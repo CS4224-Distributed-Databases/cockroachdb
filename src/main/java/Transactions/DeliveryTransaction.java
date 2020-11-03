@@ -69,7 +69,9 @@ public class DeliveryTransaction extends BaseTransaction{
                 BigDecimal orderLineAmount = new BigDecimal(0);
                 Date now = new Date();
                 Timestamp time = Timestamp.valueOf(formatDate(now));
-
+				
+				System.out.println(allOrderLines.size());
+				int count = 0;
                 for (String orderLine: allOrderLines){
                     // Update DELIVERY_OL_DELIVERY_D to current date and time
                     // OL_DELIVERY_D, OL_NUMBER, OL_W_ID, OL_D_ID, OL_O_ID
@@ -81,6 +83,11 @@ public class DeliveryTransaction extends BaseTransaction{
                     q4.execute();
                     // Sum the amount from all orderLines
                     orderLineAmount = orderLineAmount.add(amount);
+					// To track progress
+					count += 1;
+					if(count % 100==0){
+						System.out.println(count);
+					}
                 }
 
                 // 4: Update balance and delivery count for customer C

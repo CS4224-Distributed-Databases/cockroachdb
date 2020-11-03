@@ -14,7 +14,7 @@ public class InitialiseData {
         ds = new PGSimpleDataSource();
         //ds.setServerName("localhost"); //originally localhost
         //ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://192.168.48.169:26257/?sslmode=disable");
+        ds.setUrl("jdbc:postgresql://192.168.48.169:50000/?sslmode=disable");
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt

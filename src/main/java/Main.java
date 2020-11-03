@@ -12,23 +12,23 @@ public class Main {
     private static final double convertMilliSecondsDenom = 1000000.0;
 
     private static ArrayList<String> IPAddresses = new ArrayList<String>() {{
-        add("192.168.48.169");
-        add("192.168.48.170");
-        add("192.168.48.171");
-        add("192.168.48.172");
-        add("192.168.48.173");
+        add("192.168.48.169:50000");
+        add("192.168.48.170:50001");
+        add("192.168.48.171:50002");
+        add("192.168.48.172:50003");
+        add("192.168.48.173:50004");
     }};
 
     public static void main(String[] args) throws Exception {
 
         int nodeID = Integer.parseInt(args[0]);
 
-        System.out.println("Running code on node " + nodeID);
+        //System.out.println("Running code on node " + nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
         //ds.setServerName("localhost"); //originally localhost
         //ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + ":26257/?sslmode=disable");
+        ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + "/?sslmode=disable");
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
