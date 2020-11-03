@@ -12,12 +12,12 @@ runExperiments() {
   # $2 is number of clients
   #iterate through each client and assign to the correct server to run
   for ((i=0; i<$2; i++)); do
-    logIndex=$(($i + 1))
+    logIndex=$(($i + 1)) # Indexed 1
     # $3 contains the number of servers to run on
     nodeid=$(($i % $3)) # Used to pass inside Main Function so we know which node's IP address to connect to
     serverID=$((20 + nodeid))
   	server="xcnc${serverID}"
-  	echo "Assign client $i on $server"
+  	echo "Assign client $i on $server" # client Indexed 0
 
   	input_file="src/main/java/DataSource/xact-files/${logIndex}.txt"
   	stdout_file="src/main/java/experiment-logs/${logIndex}.out.log"
