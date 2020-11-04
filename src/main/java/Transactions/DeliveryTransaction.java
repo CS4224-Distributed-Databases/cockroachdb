@@ -39,11 +39,11 @@ public class DeliveryTransaction extends BaseTransaction{
         try(Connection connection = ds.getConnection()) {
 
             PreparedStatement q1 = connection.prepareStatement("SELECT O_ID, O_C_ID from Order_New WHERE O_W_ID = ? AND O_D_ID = ? AND O_CARRIER_ID IS NULL ORDER BY O_ID ASC LIMIT 1");
-            PreparedStatement q2 = connection.prepareStatement("UPDATE Order_New SET O_CARRIER_ID = ? WHERE O_ID = ?");
-            PreparedStatement q3 = connection.prepareStatement("SELECT OL_NUMBER, OL_AMOUNT from OrderLine WHERE OL_O_ID = ?");
-            PreparedStatement q4 = connection.prepareStatement("UPDATE OrderLine SET OL_DELIVERY_D = ? WHERE OL_NUMBER = ?");
-            PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? WHERE C_ID = ?");
-            PreparedStatement q6 = connection.prepareStatement("UPDATE Customer SET C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ?");
+            PreparedStatement q2 = connection.prepareStatement("UPDATE Order_New SET O_CARRIER_ID = ? WHERE O_ID = ? AND O_W_ID = ? AND O_D_ID = ?");
+            PreparedStatement q3 = connection.prepareStatement("SELECT OL_NUMBER, OL_AMOUNT from OrderLine WHERE OL_W_ID = ? AND OL_D_ID = ? AND OL_O_ID = ?");
+            PreparedStatement q4 = connection.prepareStatement("UPDATE OrderLine SET OL_DELIVERY_D = ? WHERE OL_NUMBER = ? AND OL_W_ID = ? AND OL_D_ID = ? AND OL_O_ID = ?");
+            PreparedStatement q5 = connection.prepareStatement("UPDATE Customer SET C_BALANCE = ? WHERE C_ID = ? AND C_W_ID = ? AND C_D_ID = ?");
+            PreparedStatement q6 = connection.prepareStatement("UPDATE Customer SET C_DELIVERY_CNT = C_DELIVERY_CNT + 1 WHERE C_ID = ? AND C_W_ID = ? AND C_D_ID = ?");
 
             for (int i = 1; i <= NUM_DISTRICTS; i++) {
                 // (1) Obtain O_ID and O_C_ID
@@ -59,9 +59,14 @@ public class DeliveryTransaction extends BaseTransaction{
                 // (2) Update order X by setting O_CARRIER_ID to CARRIER_ID
                 q2.setInt(1, carrierID);
                 q2.setInt(2, orderNumber);
+                q2.setInt(3, warehouseID);
+                q2.setInt(4, i);
                 q2.execute();
+
                 // (3) Update all the order lines associated with order X by setting OL DELIVERY D to the current date and time
-                q3.setInt(1, orderNumber);
+                q3.setInt(1, warehouseID);
+                q3.setInt(2, i);
+                q3.setInt(3, orderNumber);
                 q3.execute();
                 ResultSet r3 = q3.getResultSet();
                 ArrayList<String> allOrderLines = new FormResults().formResults(r3);
@@ -69,9 +74,7 @@ public class DeliveryTransaction extends BaseTransaction{
                 BigDecimal orderLineAmount = new BigDecimal(0);
                 Date now = new Date();
                 Timestamp time = Timestamp.valueOf(formatDate(now));
-				
-				System.out.println(allOrderLines.size());
-				int count = 0;
+
                 for (String orderLine: allOrderLines){
                     // Update DELIVERY_OL_DELIVERY_D to current date and time
                     // OL_DELIVERY_D, OL_NUMBER, OL_W_ID, OL_D_ID, OL_O_ID
@@ -80,23 +83,25 @@ public class DeliveryTransaction extends BaseTransaction{
 
                     q4.setTimestamp(1, time);
                     q4.setInt(2, orderLineNumber);
+                    q4.setInt(3, warehouseID);
+                    q4.setInt(4, i);
+                    q4.setInt(5, orderNumber);
                     q4.execute();
                     // Sum the amount from all orderLines
                     orderLineAmount = orderLineAmount.add(amount);
-					// To track progress
-					count += 1;
-					if(count % 100==0){
-						System.out.println(count);
-					}
                 }
 
                 // 4: Update balance and delivery count for customer C
                 // C_ID, C_W_ID, C_D_ID
                 q5.setBigDecimal(1, orderLineAmount);
                 q5.setInt(2, customerNumber);
+                q5.setInt(3, warehouseID);
+                q5.setInt(4, i);
                 q5.execute();
 
                 q6.setInt(1, customerNumber);
+                q6.setInt(2, warehouseID);
+                q6.setInt(3, i);
                 q6.execute();
             }
 
