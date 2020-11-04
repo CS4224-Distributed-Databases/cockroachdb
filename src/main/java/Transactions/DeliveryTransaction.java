@@ -51,7 +51,11 @@ public class DeliveryTransaction extends BaseTransaction{
                 q1.setInt(2, i);
                 q1.execute();
                 ResultSet r1 = q1.getResultSet();
-                String [] info = new FormResults().formResults(r1).get(0).split(",");
+                ArrayList<String> result = new FormResults().formResults(r1);
+                if(result.size() == 0) {
+                    continue;
+                }
+                String [] info = result.get(0).split(",");
 
                 int orderNumber = Integer.parseInt(info[0]);
                 int customerNumber = Integer.parseInt(info[1]);
