@@ -101,6 +101,8 @@ Set the first column to be this experiment number. <br>
 *Shut down node*
 - Open a new terminal from the node you want to shut down and type: `cockroach quit --insecure`
 
+*Check nodes status*
+- `cockroach node status --host=192.168.48.169:50000 --insecure`
 
 ## Set up instructions for local development
 (Start CockroachDB)
@@ -143,5 +145,4 @@ Set the first column to be this experiment number. <br>
 ##### To view output of script for eg, output.txt
 - `./script-to-run > output.txt`
 
-##### Could not
  
