@@ -28,7 +28,7 @@ public class Main {
         System.out.println("Running code on node " + nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-         //ds.setServerName("localhost"); //originally localhost
+        // ds.setServerName("localhost"); //originally localhost
         // ds.setPortNumber(26257);
         ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + "/?sslmode=disable");
 
