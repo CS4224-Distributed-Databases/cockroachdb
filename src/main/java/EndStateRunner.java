@@ -61,12 +61,12 @@ public class EndStateRunner {
             Integer sum_o_id = new Integer(order[0]);
             BigDecimal sum_o_ol_cnt = new BigDecimal(order[1]);
 
-            PreparedStatement q5 = connection.prepareStatement("select sum(ol_amount), sum(ol_quantity) from order_line");
+            PreparedStatement q5 = connection.prepareStatement("select sum(ol_amount), sum(ol_quantity) from orderline");
             q5.execute();
             ResultSet r5 = q5.getResultSet();
-            String [] order_line = new FormResults().formResults(r5).get(0).split(",");
-            BigDecimal sum_ol_amount = new BigDecimal(order_line[0]);
-            BigDecimal sum_ol_quantity = new BigDecimal(order_line[1]);
+            String [] orderline = new FormResults().formResults(r5).get(0).split(",");
+            BigDecimal sum_ol_amount = new BigDecimal(orderline[0]);
+            BigDecimal sum_ol_quantity = new BigDecimal(orderline[1]);
 
             PreparedStatement q6 = connection.prepareStatement("select sum(S_QUANTITY), sum(S_YTD), sum(S_ORDER_CNT), sum(S_REMOTE_CNT) from stock");
             q6.execute();
