@@ -82,21 +82,23 @@ replacing `password` with the password to the servers, `numOfClients` with 20 or
 **Generating statistics after an experiment**
 
 *Generate the Database state*
-1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner`
-2. Open `output/end_state.csv` file
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner directoryName`
+, replacing directoryName with directory containing log files (remember to include / at the end)
+2. Open `end_state.csv` file in the directory containing the logs
 3. Manually copy the results into a row of the main `db-state.csv` which records all db end state for all experiments. 
 Set the first column to be this experiment number. 
 
 *Generate Performance and Throughput Statistics*
-1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. TotalStatsRunner`
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. TotalStatsRunner numClients directoryName`
+, replacing numClients with number of clients set and directoryName with directory containing log files (remember to include / at the end)
 2. For Throughput Statistics: <br>
-2.1 Open `output/throughput_stats.csv` file <br>
+2.1 Open `throughput_stats.csv` file in the directory containing the logs <br>
 2.2 Manually copy the results into a row of the main `throughput.csv` which records all min, avg and max throughputs for all experiments. 
 Set the first column to be this experiment number. <br>
 3. For Performance Statistics: <br>
-3.1 Open `output/client_stats.csv` file <br>
-3.2 Manually copy the results into a row of the main `clients.csv` which records all clients statistics for all experiments.  <br>
-
+3.1 Open `client_stats.csv` file in the directory containing the logs <br>
+3.2 Manually copy the results into a row of the main `clients.csv` which records all clients statistics for all experiments. 
+Set the first column to be this experiment number. <br>
 
 *Shut down node*
 - Open a new terminal from the node you want to shut down and type: `cockroach quit --insecure`

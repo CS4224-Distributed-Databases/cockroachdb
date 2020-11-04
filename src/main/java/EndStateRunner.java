@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class EndStateRunner {
 
     private static PGSimpleDataSource ds;
+    public static String directoryName;
 
     public static void main(String[] args) {
 
@@ -76,7 +77,10 @@ public class EndStateRunner {
             Integer sum_s_order_cnt = new Integer(stock[2]);
             Integer sum_s_remote_cnt = new Integer(stock[3]);
 
-            try (PrintWriter writer = new PrintWriter(new File("src/output/end_state.csv"))) {
+            directoryName = args[0];
+            System.out.println("directory is " + directoryName);
+
+            try (PrintWriter writer = new PrintWriter(new File(directoryName + "end_state.csv"))) {
                 StringBuilder sb = new StringBuilder();
                 // Key in the experiment number manually in a separate csv
                 // 1-4 for Cassandra, 5-8 for Cockroach
@@ -147,7 +151,7 @@ public class EndStateRunner {
 
                 writer.write(sb.toString());
 
-                System.out.println("done writing to output/end_state.csv");
+                System.out.println("done writing to end_state.csv");
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
             }
