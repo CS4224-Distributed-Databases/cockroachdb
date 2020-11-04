@@ -10,7 +10,7 @@ startCockroach() {
   echo "node 3"
   yes "\n" | sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; cd temp/; ./start-cockroach-node4.sh;" &
   echo "node 4"
-  yes "\n" | sshpass -p $1 ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; cd temp/; ./start-cockroach-node5.sh; cockroach init --insecure" &
+  yes "\n" | sshpass -p $1 ssh cs4224j@xcnc24.comp.nus.edu.sg "source .bash_profile; cd temp/; ./start-cockroach-node5.sh; cockroach init --insecure --host=192.168.48.169:50000;" &
   echo "node 5"
   echo "Cockroach initialised"
 }
