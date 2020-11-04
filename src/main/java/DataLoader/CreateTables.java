@@ -28,7 +28,6 @@ public class CreateTables {
 
     // Need to drop tables with FK dependencies first
     public void dropTables(){
-        runSQL("DROP VIEW IF EXISTS CustomerOrderItemsPairView");
         runSQL("DROP VIEW IF EXISTS CustomerOrderItemsView");
         runSQL("DROP VIEW IF EXISTS CustomerOrderView");
 
@@ -89,7 +88,7 @@ public class CreateTables {
 
     public void createViews() {
 
-        //For Related Customer and Popular Item Transactions (first two)
+        //For Popular Item Transactions (first two)
 
         // https://stackoverflow.com/questions/30918633/sql-cte-vs-view
         // Views can be indexed but CTE can't => Hence we choose to use View here
@@ -104,14 +103,6 @@ public class CreateTables {
         runSQL("CREATE VIEW CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID, COI_O_ID) " +
                 "AS SELECT CustomerOrderView.CO_C_ID, CustomerOrderView.CO_W_ID, CustomerOrderView.CO_D_ID, OrderLine.OL_I_ID, OrderLine.OL_O_ID " +
                 "FROM CustomerOrderView JOIN OrderLine ON CustomerOrderView.CO_O_ID = OrderLine.OL_O_ID");
-
-        // Used by RelatedCustomer
-        // Here, we pair customers who have different customer IDs, different warehouse Ids and buys the same items
-        runSQL("CREATE VIEW CustomerOrderItemsPairView(C_ID_One, W_ID_One, D_ID_One, COI_I_ID_One, C_ID_Two, W_ID_Two, D_ID_Two, COI_I_ID_Two) " +
-                "AS SELECT first.COI_C_ID, first.COI_W_ID, first.COI_D_ID, first.COI_I_ID, second.COI_C_ID, second.COI_W_ID, second.COI_D_ID, second.COI_I_ID " +
-                "FROM CustomerOrderItemsView AS first JOIN CustomerOrderItemsView AS second " +
-                "ON first.COI_C_ID <> second.COI_C_ID AND first.COI_I_ID = second.COI_I_ID AND first.COI_W_ID <> second.COI_W_ID");
-
 
     }
 
