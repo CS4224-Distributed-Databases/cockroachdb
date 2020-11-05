@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class EndStateRunner {
 
     private static PGSimpleDataSource ds;
+    public static String directoryName;
 
     public static void main(String[] args) {
 
@@ -60,12 +61,12 @@ public class EndStateRunner {
             Integer sum_o_id = new Integer(order[0]);
             BigDecimal sum_o_ol_cnt = new BigDecimal(order[1]);
 
-            PreparedStatement q5 = connection.prepareStatement("select sum(ol_amount), sum(ol_quantity) from order_line");
+            PreparedStatement q5 = connection.prepareStatement("select sum(ol_amount), sum(ol_quantity) from orderline");
             q5.execute();
             ResultSet r5 = q5.getResultSet();
-            String [] order_line = new FormResults().formResults(r5).get(0).split(",");
-            BigDecimal sum_ol_amount = new BigDecimal(order_line[0]);
-            BigDecimal sum_ol_quantity = new BigDecimal(order_line[1]);
+            String [] orderline = new FormResults().formResults(r5).get(0).split(",");
+            BigDecimal sum_ol_amount = new BigDecimal(orderline[0]);
+            BigDecimal sum_ol_quantity = new BigDecimal(orderline[1]);
 
             PreparedStatement q6 = connection.prepareStatement("select sum(S_QUANTITY), sum(S_YTD), sum(S_ORDER_CNT), sum(S_REMOTE_CNT) from stock");
             q6.execute();
@@ -76,7 +77,10 @@ public class EndStateRunner {
             Integer sum_s_order_cnt = new Integer(stock[2]);
             Integer sum_s_remote_cnt = new Integer(stock[3]);
 
-            try (PrintWriter writer = new PrintWriter(new File("src/output/end_state.csv"))) {
+            directoryName = args[0];
+            System.out.println("directory is " + directoryName);
+
+            try (PrintWriter writer = new PrintWriter(new File(directoryName + "end_state.csv"))) {
                 StringBuilder sb = new StringBuilder();
                 // Key in the experiment number manually in a separate csv
                 // 1-4 for Cassandra, 5-8 for Cockroach
@@ -147,7 +151,7 @@ public class EndStateRunner {
 
                 writer.write(sb.toString());
 
-                System.out.println("done writing to output/end_state.csv");
+                System.out.println("done writing to end_state.csv");
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
             }

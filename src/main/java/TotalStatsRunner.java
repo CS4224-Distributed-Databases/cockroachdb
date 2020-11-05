@@ -1,4 +1,3 @@
-import org.postgresql.ds.PGSimpleDataSource;
 import util.StatsItem;
 
 import java.io.*;
@@ -7,31 +6,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// This class iterates through the err log files
+// Get the stats for max, min, avg throughputs among all clients for this experiment -> ultimately for throughputs.csv
+// Get all clients performance stats for this experiment -> ultimately for clients.csv
 public class TotalStatsRunner {
 
-    private static PGSimpleDataSource ds;
+    public static String directoryName;
 
     public static void main(String[] args) {
-
-        // (1) Initialise Cluster
-        // Configure the database connection.
-        ds = new PGSimpleDataSource();
-        ds.setServerName("localhost");
-        ds.setPortNumber(26257);
-
-        ds.setDatabaseName("cs4224"); // Impt
-        ds.setUser("root"); // Note that we created an insecure password that does not require password
-        ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string
-        ds.setApplicationName("CS4224");
-
-        // USER TO INPUT THE NUM OF CLIENTS THAT WAS PASSED IN TO TEST
-        int numClients = Integer.parseInt(args[1]);
+        // USER TO INPUT THE NUM OF CLIENTS THAT WAS PASSED IN AND DIRECTORY WITH LOG FILES TO TEST
+        int numClients = Integer.parseInt(args[0]);
+        directoryName = args[1];
+        System.out.println(numClients + " " + directoryName);
         List<StatsItem> clientsStatsList = new ArrayList<>();
         double[] result = getStatsFromLogFiles(numClients, clientsStatsList);
         writeTotalThroughputStatsToCsv(result[0], result[1], result[2], numClients);
         writeClientsStatsToCsv(clientsStatsList);
-
-        close();
     }
 
     public static double[] getStatsFromLogFiles(int numClients, List<StatsItem> clientsStatsList) {
@@ -42,15 +32,16 @@ public class TotalStatsRunner {
         double totalThroughputPercentage = 0; // to calculate average later
 
         for (int i = 1; i <= numClients; i++) {
-            String fileName = "experiment-logs/" + i + ".err.log";
+            String fileName = directoryName + i + ".err.log";
             StatsItem statsForThisClient = new StatsItem();
             statsForThisClient.clientNum = (double) i;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(fileName));
                 String line;
                 while( (line = br.readLine() ) != null) {
+//                    System.out.println(line);
                     if (line.startsWith("Number of executed transactions: ")) {
-                        Pattern p = Pattern.compile("(\\d+(?:\\.\\d+))");
+                        Pattern p = Pattern.compile("(\\d+(?:\\d+))");
                         Matcher m = p.matcher(line);
                         if (m.find()) {
                             statsForThisClient.numOfTransactions = Double.parseDouble(m.group(1));
@@ -115,7 +106,7 @@ public class TotalStatsRunner {
         /*
             THROUGHPUT STATS
          */
-        try (PrintWriter writer = new PrintWriter(new File("src/output/throughput_stats.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File(directoryName + "throughput_stats.csv"))) {
             StringBuilder sb = new StringBuilder();
             // Key in the experiment number manually in a separate csv
             // 1-4 for Cassandra, 5-8 for Cockroach
@@ -136,7 +127,7 @@ public class TotalStatsRunner {
 
             writer.write(sb.toString());
 
-            System.out.println("done writing to output/throughput_stats.csv");
+            System.out.println("done writing to throughput_stats.csv");
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -147,7 +138,7 @@ public class TotalStatsRunner {
         /*
             CLIENT STATS
          */
-        try (PrintWriter writer = new PrintWriter(new File("src/output/client_stats.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File(directoryName + "client_stats.csv"))) {
             StringBuilder sb = new StringBuilder();
             // Key in the experiment number manually in a separate csv
             // 1-4 for Cassandra, 5-8 for Cockroach
@@ -192,15 +183,10 @@ public class TotalStatsRunner {
 
             writer.write(sb.toString());
 
-            System.out.println("done writing to output/client_stats.csv");
+            System.out.println("done writing to client_stats.csv");
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void close(){
-        // close and exit
-        System.exit(0);
     }
 
 }

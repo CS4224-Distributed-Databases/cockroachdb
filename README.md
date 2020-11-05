@@ -55,9 +55,9 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - run `./start-cockroach-node3.sh` on server xcnc22 (Node3) <br>   
     - run `./start-cockroach-node4.sh` on server xcnc23 (Node4) <br>  
     - run `./start-cockroach-node5.sh` on server xcnc24 (Node5) <br> 
-    - If you have not initialised the cluster before, run `cockroach init --insecure` on either of the servers eg, xcnc20 <br> 
-3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
-4. You will also see new folders titled node1, node2, node3...node5 being created inside the /temp directory.
+    - If you have not initialised the cluster before, run `cockroach init --insecure --host=192.168.48.169:50000` on either of the servers eg, xcnc20 <br> 
+3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169:50000 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script. Alternate command is `cockroach node status --host=192.168.48.169:50000 --insecure`
+4. You will also see new folders titled node1, node2, node3, node4 and node5 being created inside the /temp directory.
 
 >Check that file scripts permissions are `rwx------`
 >If you experience any problems whereby ports have been binded, you can refer to the last section of the readme to find out how to kill the process.
@@ -66,10 +66,6 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
 1. ssh into one server `ssh cs4224j@xcnc20.comp.nus.edu.sg`
 2. Inside `/temp` directory, run `cd cockroachdb` to enter the project directory 
 3. Build the project by `mvn clean dependency:copy-dependencies package`
-
-**Create Tables and Loading data on the server**
-1. `java -Xms45g -Xmx45g -cp target/*:target/dependency/*:. InitialiseData` <br>
->Note that step 1 drops all existing tables and create new ones
 
 **Running an experiment from your local computer**
 0. If you are running on a Windows computer, open Ubuntu App CMD (or download from the store) as the commands below are for linux.
@@ -82,21 +78,23 @@ replacing `password` with the password to the servers, `numOfClients` with 20 or
 **Generating statistics after an experiment**
 
 *Generate the Database state*
-1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner`
-2. Open `output/end_state.csv` file
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner directoryName`
+, replacing directoryName with directory containing log files (remember to include / at the end)
+2. Open `end_state.csv` file in the directory containing the logs
 3. Manually copy the results into a row of the main `db-state.csv` which records all db end state for all experiments. 
 Set the first column to be this experiment number. 
 
 *Generate Performance and Throughput Statistics*
-1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. TotalStatsRunner`
+1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. TotalStatsRunner numClients directoryName`
+, replacing numClients with number of clients set and directoryName with directory containing log files (remember to include / at the end)
 2. For Throughput Statistics: <br>
-2.1 Open `output/throughput_stats.csv` file <br>
+2.1 Open `throughput_stats.csv` file in the directory containing the logs <br>
 2.2 Manually copy the results into a row of the main `throughput.csv` which records all min, avg and max throughputs for all experiments. 
 Set the first column to be this experiment number. <br>
 3. For Performance Statistics: <br>
-3.1 Open `output/client_stats.csv` file <br>
-3.2 Manually copy the results into a row of the main `clients.csv` which records all clients statistics for all experiments.  <br>
-
+3.1 Open `client_stats.csv` file in the directory containing the logs <br>
+3.2 Manually copy the results into a row of the main `clients.csv` which records all clients statistics for all experiments. 
+Set the first column to be this experiment number. <br>
 
 *Shut down node*
 - Open a new terminal from the node you want to shut down and type: `cockroach quit --insecure`
