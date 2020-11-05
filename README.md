@@ -55,9 +55,9 @@ The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-fi
     - run `./start-cockroach-node3.sh` on server xcnc22 (Node3) <br>   
     - run `./start-cockroach-node4.sh` on server xcnc23 (Node4) <br>  
     - run `./start-cockroach-node5.sh` on server xcnc24 (Node5) <br> 
-    - If you have not initialised the cluster before, run `cockroach init --insecure` on either of the servers eg, xcnc20 <br> 
-3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script.
-4. You will also see new folders titled node1, node2, node3...node5 being created inside the /temp directory.
+    - If you have not initialised the cluster before, run `cockroach init --insecure --host=192.168.48.169:50000` on either of the servers eg, xcnc20 <br> 
+3. To check that the cluster is working, type `cockroach sql --host=192.168.48.169:50000 --insecure` on xcnc20. Make sure to match the host address to the one set for that machine you are typing the command for. The ip can be seen in the script. Alternate command is `cockroach node status --host=192.168.48.169:50000 --insecure`
+4. You will also see new folders titled node1, node2, node3, node4 and node5 being created inside the /temp directory.
 
 >Check that file scripts permissions are `rwx------`
 >If you experience any problems whereby ports have been binded, you can refer to the last section of the readme to find out how to kill the process.
