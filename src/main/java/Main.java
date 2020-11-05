@@ -23,14 +23,14 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        int nodeID = Integer.parseInt(args[0]);
+        //int nodeID = Integer.parseInt(args[0]);
 
-        System.out.println("Running code on node " + nodeID);
+        //System.out.println("Running code on node " + nodeID);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        // ds.setServerName("localhost"); //originally localhost
-        // ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + "/?sslmode=disable");
+         ds.setServerName("localhost"); //originally localhost
+         ds.setPortNumber(26257);
+        //ds.setUrl("jdbc:postgresql://" + IPAddresses.get(nodeID) + "/?sslmode=disable");
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
@@ -68,7 +68,7 @@ public class Main {
             } else if (inputLine.startsWith("T")) {
                 transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-               // transaction = new RelatedCustomerTransaction(ds); // too long to execute....skipping
+               //transaction = new RelatedCustomerTransaction(ds); // too long to execute....skipping
             }
 
             if (transaction != null) {
@@ -86,8 +86,8 @@ public class Main {
         Collections.sort(latencies);
         double averageLatencyInMs = getAverageLatency(latencies) / convertMilliSecondsDenom;
         double medianLatencyInMs = getMedianLatency(latencies) / convertMilliSecondsDenom;
-        double percentileLatency95InMs = getPercentileLatency(latencies, 95) / convertMilliSecondsDenom;
-        double percentileLatency99InMs = getPercentileLatency(latencies, 99) / convertMilliSecondsDenom;
+        double percentileLatency95InMs = getPercentileLatency(latencies, 5) / convertMilliSecondsDenom;
+        double percentileLatency99InMs = getPercentileLatency(latencies, 1) / convertMilliSecondsDenom;
 
         printPerformance(numOfTransactions, timeElapsedInSeconds, averageLatencyInMs, medianLatencyInMs, percentileLatency95InMs, percentileLatency99InMs);
 

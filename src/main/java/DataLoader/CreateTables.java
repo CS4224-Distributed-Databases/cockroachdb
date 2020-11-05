@@ -97,12 +97,12 @@ public class CreateTables {
         //used by both
         runSQL("CREATE VIEW CustomerOrderView(CO_O_ID, CO_O_ENTRY_D, CO_C_ID, CO_W_ID, CO_D_ID, CO_C_FIRST, CO_C_MIDDLE, CO_C_LAST) " +
                 "AS SELECT Order_New.O_ID, Order_New.O_ENTRY_D, Customer.C_ID, Customer.C_W_ID, Customer.C_D_ID, Customer.C_FIRST, Customer.C_MIDDLE, Customer.C_LAST FROM " +
-                "Customer JOIN Order_New ON Customer.C_ID = Order_New.O_C_ID");
+                "Customer JOIN Order_New ON Customer.C_ID = Order_New.O_C_ID AND Customer.C_W_ID = Order_New.O_W_ID AND Customer.C_D_ID = Order_New.O_D_ID");
 
         //used by both
         runSQL("CREATE VIEW CustomerOrderItemsView(COI_C_ID, COI_W_ID, COI_D_ID, COI_I_ID, COI_O_ID) " +
                 "AS SELECT CustomerOrderView.CO_C_ID, CustomerOrderView.CO_W_ID, CustomerOrderView.CO_D_ID, OrderLine.OL_I_ID, OrderLine.OL_O_ID " +
-                "FROM CustomerOrderView JOIN OrderLine ON CustomerOrderView.CO_O_ID = OrderLine.OL_O_ID");
+                "FROM CustomerOrderView JOIN OrderLine ON CustomerOrderView.CO_O_ID = OrderLine.OL_O_ID AND CustomerOrderView.CO_D_ID = OrderLine.OL_D_ID AND CustomerOrderView.CO_W_ID = OrderLine.OL_W_ID");
 
     }
 
