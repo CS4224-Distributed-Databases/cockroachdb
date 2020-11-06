@@ -17,12 +17,13 @@ public class EndStateRunner {
 
     public static void main(String[] args) {
 
-        // (1) Initialise Cluster
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        ds.setServerName("localhost");
-        ds.setPortNumber(26257);
+        //ds.setServerName("localhost"); //originally localhost
+        //ds.setPortNumber(26257);
+        ds.setUrl("jdbc:postgresql://192.168.48.169:50000/?sslmode=disable");
 
+        System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
         ds.setUser("root"); // Note that we created an insecure password that does not require password
         ds.setReWriteBatchedInserts(true); // add `rewriteBatchedInserts=true` to pg connection string

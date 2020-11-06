@@ -1,9 +1,0 @@
----------------- Performance Output ----------------
-Number of executed transactions: 18125
-Total transaction execution time (sec): 8094.49
-Transaction throughput: 2.24
-Average transaction latency (ms): 446.51
-Median transaction latency (ms): 122.19
-95th percentile transaction latency (ms): 10.24
-99th percentile transaction latency (ms): 10.24
-----------------------------------------------------
