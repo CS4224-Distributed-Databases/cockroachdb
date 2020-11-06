@@ -86,7 +86,7 @@ replacing `password` with the password to the servers, `numOfClients` with 20 or
 1. run `java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. EndStateRunner serverOneIPAddr directoryName`
 , replacing serverIPAddress with the correct address of the server (can be the first server) and replacing directoryName with directory containing log files (remember to include / at the end)
 2. Open `end_state.csv` file in the directory containing the logs
-3. Manually copy the results into a row of the main `db-state.csv` which records all db end state for all experiments. 
+3. Manually copy the results into a row of the main `dbstate.csv` which records all db end state for all experiments. 
 Set the first column to be this experiment number. 
 
 *Generate Performance and Throughput Statistics*
