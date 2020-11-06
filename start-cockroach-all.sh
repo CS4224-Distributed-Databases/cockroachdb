@@ -21,13 +21,13 @@ startCockroach() {
     echo "Finish set up cockroachdb on all 5 nodes"
   else
     echo "Starting cockroach on all 4 nodes"
-    sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node1 --join=$3,$4,$5,$6,$7 --listen-addr=$3 --advertise-addr=$3 --http-addr=$3 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
+    sshpass -p $1 ssh cs4224j@xcnc20.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node1 --join=$3,$4,$5,$6 --listen-addr=$3 --advertise-addr=$3 --http-addr=$3 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
     echo "node 1"
-    sshpass -p $1 ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node2 --join=$3,$4,$5,$6,$7 --listen-addr=$4 --advertise-addr=$4 --http-addr=$4 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
+    sshpass -p $1 ssh cs4224j@xcnc21.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node2 --join=$3,$4,$5,$6 --listen-addr=$4 --advertise-addr=$4 --http-addr=$4 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
     echo "node 2"
-    sshpass -p $1 ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node3 --join=$3,$4,$5,$6,$7 --listen-addr=$5 --advertise-addr=$5 --http-addr=$5 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
+    sshpass -p $1 ssh cs4224j@xcnc22.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node3 --join=$3,$4,$5,$6 --listen-addr=$5 --advertise-addr=$5 --http-addr=$5 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
     echo "node 3"
-    sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node4 --join=$3,$4,$5,$6,$7 --listen-addr=$6 --advertise-addr=$6 --http-addr=$6 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
+    sshpass -p $1 ssh cs4224j@xcnc23.comp.nus.edu.sg "source .bash_profile; cd temp/; cockroach start --store=node4 --join=$3,$4,$5,$6 --listen-addr=$6 --advertise-addr=$6 --http-addr=$6 --cache=.25 --max-sql-memory=.25 --insecure --background;" &
     echo "node 4"
     echo "Finish set up cockroachdb on all 4 nodes"
   fi
