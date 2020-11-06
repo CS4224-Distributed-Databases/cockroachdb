@@ -17,11 +17,14 @@ public class EndStateRunner {
 
     public static void main(String[] args) {
 
+        String serverIP = args[0];
+
+        System.out.println("Running code on node " + serverIP);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        //ds.setServerName("localhost"); //originally localhost
-        //ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://192.168.48.169:50000/?sslmode=disable");
+        // ds.setServerName("localhost"); //originally localhost
+        // ds.setPortNumber(26257);
+        ds.setUrl("jdbc:postgresql://" + serverIP + "/?sslmode=disable");
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
@@ -78,7 +81,7 @@ public class EndStateRunner {
             Integer sum_s_order_cnt = new Integer(stock[2]);
             Integer sum_s_remote_cnt = new Integer(stock[3]);
 
-            directoryName = args[0];
+            directoryName = args[1];
             System.out.println("directory is " + directoryName);
 
             try (PrintWriter writer = new PrintWriter(new File(directoryName + "end_state.csv"))) {

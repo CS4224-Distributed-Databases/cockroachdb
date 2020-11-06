@@ -10,11 +10,14 @@ public class InitialiseData {
 
     public static void main(String[] args)  throws Exception {
 
+        String serverIP = args[0];
+
+        System.out.println("Running code on node " + serverIP);
         // Configure the database connection.
         ds = new PGSimpleDataSource();
-        //ds.setServerName("localhost"); //originally localhost
-        //ds.setPortNumber(26257);
-        ds.setUrl("jdbc:postgresql://192.168.48.169:50000/?sslmode=disable");
+        // ds.setServerName("localhost"); //originally localhost
+        // ds.setPortNumber(26257);
+        ds.setUrl("jdbc:postgresql://" + serverIP + "/?sslmode=disable");
 
         System.out.println(ds.getDescription());
         ds.setDatabaseName("cs4224"); // Impt
