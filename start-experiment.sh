@@ -33,7 +33,7 @@ runExperiments() {
   	sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; touch temp/cockroachdb/src/main/java/experiment-logs/${logIndex}.txt; touch temp/cockroachdb/src/main/java/experiment-logs/${logIndex}.out.log; touch temp/cockroachdb/src/main/java/experiment-logs/${logIndex}.err.log"
 
   	echo "Start running transactions via Main function"
-    #sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. Main $serverIP < ${input_file} > ${stdout_file} 2> ${stderr_file} &"> /dev/null 2>&1 &
+    sshpass -p $1 ssh cs4224j@${server}.comp.nus.edu.sg "source .bash_profile; cd temp/cockroachdb && java -Xms4g -Xmx4g -cp target/*:target/dependency/*:. Main $serverIP < ${input_file} > ${stdout_file} 2> ${stderr_file} &"> /dev/null 2>&1 &
   	echo "Finish running ${i+1} transaction file on $server"
   done
 }
