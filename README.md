@@ -19,9 +19,12 @@ This learning tasks for this project are
 ## Project Structure
 The bulk of our code are in the folder src -> main -> java
 - DataLoader Folder: Contains the code to load the data into the Cassandra database and create table schemas
-- DataSource Folder: Since the csv files are too big, we will not upload them on github. Ensure that you copy the data csv files to this directory locally. 
+- DataSource Folder: Since the csv files are too big, we will not upload them on github. Ensure that you copy the data csv files into `DataSource/data-files` and transaction txt files into `DataSource/xact-files` folder locally. <br>The files can be downloaded [here](http://www.comp.nus.edu.sg/~cs4224/project-files.zip).
 - Transactions: Contains a base transaction file + 8 Transaction queries
 - The file BasicExample.java is just a basic template code for reference. It is provided in Cockroachdb documentation and not in use.
+- The file EndStateRunner and TotalStatsRunner helps to collate the experimental results
+- The file InitialiseData helps to create tables/views on cockroachdb nodes cluster on the server and load data.
+- The file Main helps to receive the transaction inputs and coordinates the running of the transactions on the server it is being run on.
 
 We also have two script files to assist in setting up cockroachdb and run the experiments on the servers
 - start-cockroach-all.sh: Helps to start cockroachdb on the server
