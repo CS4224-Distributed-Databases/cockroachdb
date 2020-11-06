@@ -68,7 +68,7 @@ public class Main {
             } else if (inputLine.startsWith("T")) {
                 transaction = new TopBalanceTransaction(ds);
             } else if (inputLine.startsWith("R")) {
-               // transaction = new RelatedCustomerTransaction(ds); // too long to execute....skipping
+                transaction = new RelatedCustomerTransaction(ds);
             }
 
             if (transaction != null) {

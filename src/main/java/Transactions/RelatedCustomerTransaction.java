@@ -29,7 +29,6 @@ public class RelatedCustomerTransaction extends BaseTransaction{
         this.customerID = Integer.parseInt(input[3]);
     }
 
-    // SUPER LONG TRANSACTION. Since it doesnt affect the state of the database, we are going to not run it.
     public void execute() {
         System.out.println("Start Related Customers...");
         try(Connection connection = ds.getConnection()) {
